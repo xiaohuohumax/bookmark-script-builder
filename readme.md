@@ -32,7 +32,7 @@
 
 ### 方式二: 打开目标网址, F12 打开控制台, 复制[控制台版本](./dist/console/)的代码并执行
 
-![控制台版本](./image/con.png)
+![控制台版本](./image/con_n.png)
 
 ![控制台版本使用](./image/con_use.png)
 
