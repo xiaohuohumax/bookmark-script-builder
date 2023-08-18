@@ -1,0 +1,109 @@
+:root {
+    --background-color: white;
+    --tab-width: 1.5rem;
+    --link-color: #646cff;
+    --link-hover-color: #fc5531;
+    --tree-border-color: #234;
+    --tree-border-width: 2px;
+    --text-color: #364458;
+    --line-margin: 1rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 2rem 4rem;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    min-height: 200vh;
+}
+
+dl>dt {
+    padding-left: var(--tab-width);
+}
+
+body>dl>dt {
+    padding-left: 0;
+}
+
+body>dl {
+    border: dashed var(--tree-border-color);
+    border-width: var(--tree-border-width) 0;
+}
+
+dl>dt {
+    padding-left: var(--tab-width);
+}
+
+a {
+    display: inline-block;
+    text-decoration: none;
+    margin: .75rem 0;
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
+dt {
+    border-left: var(--tree-border-width) dashed var(--tree-border-color);
+}
+
+dl {
+    margin: 0;
+    padding: 1rem 0;
+}
+
+p {
+    margin: 0;
+}
+
+body>dl>dt {
+    border: none;
+}
+
+dt>a>i {
+    vertical-align: middle;
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: .5rem;
+    border-radius: 4px;
+    margin-bottom: .125rem;
+}
+
+dt>h3 {
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+    padding: .5rem 0 .5rem .125rem;
+    margin: 0;
+}
+
+dl:not(:has(dt))::after {
+    content: "[空文件夹]";
+    font-size: 14px;
+    font-weight: bold;
+}
+
+dt>h3::before {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * var(--tab-width));
+    display: block;
+    background: var(--background-color);
+    content: "";
+    width: var(--tab-width);
+    height: 100%;
+}
+
+h3[PERSONAL_TOOLBAR_FOLDER]::after {
+    content: " [ROOT]";
+    color: var(--link-hover-color);
+    font-size: 80%;
+}
