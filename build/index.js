@@ -57,8 +57,8 @@ async function buildDir(dirPath, dirName, options, deepLevel) {
         if (isuse !== "true") {
             return childs;
         }
-        context = `${name}[${description}]`;
-        context = context == "[]" ? dirName : context;
+        context = name + (description  && `[${description}]`);
+        context = context == "" ? dirName : context;
         childs = await walkFavoritesScript(dirPath, options, deepLevel + 2);
 
         if (ismtp === "true") {
@@ -118,7 +118,7 @@ async function buildTag(scriptPath, options, deepLevel) {
 
     const iconPath = icon == "" ? path.join(options.defaultPath, options.default.icon) : normalizePath(icon, scriptParentPath);
     return new fa.FavoritesTag({
-        CONTEXT: `${name}[${description}](${version})`,
+        CONTEXT: name + (description && `[${description}]`) + (version && `(${version})`),
         ICON: fs.existsSync(iconPath) ? fileToBase64(iconPath) : undefined,
         HREF: favoritesScriptContext
     });

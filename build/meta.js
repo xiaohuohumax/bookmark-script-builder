@@ -36,11 +36,10 @@ export function getScriptMeta(scriptPath) {
         .flat(Infinity)
         .map(item => Array.from(item.matchAll(/#(\w+)\s+(.*)[^\r\n]*/ig))
             .map(item => ({ [item[1].trim()]: item[2].trim() })))
-        .flat(Infinity)
-        .reduce((i1, i2) => ({ ...i1, ...i2 }));
+        .flat(Infinity);
 
     return {
         name: "", description: "", icon: "", version: "", config: "", isuse: "false",
-        ...res
+        ...(res.length > 0 ? res.reduce((i1, i2) => ({ ...i1, ...i2 })) : {})
     };
 }

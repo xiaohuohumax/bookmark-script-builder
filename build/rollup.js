@@ -1,14 +1,29 @@
 import { rollup } from "rollup";
 import json from "@rollup/plugin-json";
-import resolve from "@rollup/plugin-node-resolve";
+import nodeResolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import alias from "@rollup/plugin-alias";
 import cleanup from "rollup-plugin-cleanup";
+import postcss from "rollup-plugin-postcss";
+import autoprefixer from "autoprefixer";
+import cssnano from "cssnano";
+import path from "path";
 
-export async function buildIIFE({ input, outputFile, externals = {}, isCompact = true, isCleanup = true }) {
+export async function buildIIFE({ input, outputFile, externals = {}, isCompact = true, isCleanup = true, }) {
     const plugins = [
         commonjs({ include: /node_modules/ }),
-        resolve(),
+        nodeResolve(),
         json(),
+        postcss({
+            plugins: [cssnano(), autoprefixer()]
+        }),
+        alias({
+            entries: [
+                { find: "$script", replacement: path.resolve(path.resolve(), "src/script") },
+                { find: "$tool", replacement: path.resolve(path.resolve(), "src/tool") },
+                { find: "@", replacement: path.resolve(path.resolve(), "src") },
+            ]
+        }),
     ];
 
     if (isCleanup) {

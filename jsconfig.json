@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "$script/*": [
+                "src/script/*"
+            ],
+            "$tool/*": [
+                "src/tool/*"
+            ]
+        },
+        "resolveJsonModule": true
+    },
+    "include": [
+        "src/"
+    ]
+}
