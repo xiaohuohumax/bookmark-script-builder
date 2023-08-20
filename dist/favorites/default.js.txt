@@ -1,7 +1,0 @@
-/**
- * 名称 默认
- * 版本 1.0.0
- * 描述 这里啥也没有
- */
-
-javascript: (function()%7B'use%20strict';alert(%22%E8%BF%99%E9%87%8C%E5%95%A5%E4%B9%9F%E6%B2%A1%E6%9C%89%22);%7D)();void(0);
