@@ -1,5 +1,5 @@
 {
-  "name": "browser-favorites-script",
+  "name": "bookmark-script-builder",
   "version": "1.0.0",
   "type": "module",
   "description": "收藏夹/书签脚本打包工具",

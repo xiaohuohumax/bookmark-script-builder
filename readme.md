@@ -1,4 +1,4 @@
-# browser favorites script
+# bookmark script builder
 
 收藏夹/书签脚本打包工具
 
