@@ -178,7 +178,17 @@ export async function build(options = defaultOptions) {
         ICON: fileToBase64(path.join(options.defaultPath, options.default.icon)),
         STYLE: readFileSync(path.join(options.defaultPath, options.default.css)),
         SCRIPT: readFileSync(path.join(options.defaultPath, options.default.script)),
-        SUBCONTEXT: `使用方式:<BR/>1. 将此文件[${options.favoritesFileName}]导入浏览器;<BR/>2. 到对应的网页点击收藏夹标签即可执行脚本;`,
+        SUBCONTEXT: `<H4>使用方式:</H4>
+        <H5>全部导入:</H5>
+        <UL>
+            <LI>将此文件[${options.favoritesFileName}]导入浏览器</LI>
+            <LI>到对应的网页点击收藏夹标签即可执行脚本</LI>
+        </UL>
+        <H5>单独添加:</H5>
+        <UL>
+            <LI>直接点住脚本链接拖到浏览器的收藏夹/书签中</LI>
+            <LI>到对应的网页点击收藏夹标签即可执行脚本</LI>
+        </UL>`,
         childs: [
             new fa.FavoritesDir({
                 CONTEXT: "用户脚本",

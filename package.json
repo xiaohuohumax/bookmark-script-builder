@@ -5,7 +5,8 @@
   "description": "收藏夹/书签脚本打包工具",
   "main": "main.js",
   "scripts": {
-    "build": "node main.js"
+    "build": "node main.js",
+    "lint:fix": "eslint --fix --ext .js ."
   },
   "keywords": [],
   "author": "",

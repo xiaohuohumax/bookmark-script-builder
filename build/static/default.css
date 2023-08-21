@@ -107,3 +107,23 @@ h3[PERSONAL_TOOLBAR_FOLDER]::after {
     color: var(--link-hover-color);
     font-size: 80%;
 }
+
+input[type="checkbox"] {
+    width: 1.15rem;
+    height: 1.15rem;
+    vertical-align: middle;
+}
+
+h3:has(:not(input[type="checkbox"]:checked))~dl {
+    display: none;
+}
+
+#help h5,#help h4 {
+    margin-bottom: .125rem;
+    margin-top: .5rem;
+}
+#help ul {
+    margin: .125rem 0 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.8rem;
+}

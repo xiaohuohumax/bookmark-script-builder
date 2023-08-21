@@ -8,7 +8,7 @@ export default function msg(options) {
         showConfirmButton: false,
         timer: 4000,
         icon: "success",
-        timerProgressBar:true,
+        timerProgressBar: true,
         ...options
     });
 }

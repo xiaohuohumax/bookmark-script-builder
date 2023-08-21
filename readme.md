@@ -37,3 +37,9 @@
 ![控制台版本使用](./image/con_use.png)
 
 ![修改配置](./image//con_r.png)
+
+### 方式三: 打开[收藏夹/书签](./dist/favorites.html), 按住脚本链接拖入浏览器收藏夹/书签栏即可使用
+
+![拖动](./image/move_before.png)
+
+![拖动](./image/move_after.png)

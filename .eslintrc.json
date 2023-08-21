@@ -9,6 +9,12 @@
         "sourceType": "module"
     },
     "rules": {
+        "key-spacing": [
+            "error",
+            {
+                "afterColon": true
+            }
+        ],
         "indent": [
             "error",
             4
