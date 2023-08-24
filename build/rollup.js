@@ -3,19 +3,21 @@ import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import alias from "@rollup/plugin-alias";
-import cleanup from "rollup-plugin-cleanup";
+import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
+import cleanup from "rollup-plugin-cleanup";
+import postcssImport from "postcss-import";
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
 import path from "path";
 
-export async function buildIIFE({ input, outputFile, externals = {}, isCompact = true, isCleanup = true, }) {
+export async function buildIIFE({ input, outputFile, isTerser = true }) {
     const plugins = [
         commonjs({ include: /node_modules/ }),
-        nodeResolve(),
+        nodeResolve({ preferBuiltins: true, browser: true }),
         json(),
         postcss({
-            plugins: [cssnano(), autoprefixer()]
+            plugins: [cssnano(), autoprefixer(), postcssImport()]
         }),
         alias({
             entries: [
@@ -24,14 +26,14 @@ export async function buildIIFE({ input, outputFile, externals = {}, isCompact =
                 { find: "@", replacement: path.resolve(path.resolve(), "src") },
             ]
         }),
+        cleanup(),
     ];
 
-    if (isCleanup) {
-        plugins.push(cleanup());
+    if (isTerser) {
+        plugins.push(terser());
     }
 
     const bundle = await rollup({
-        external: Object.keys(externals),
         input,
         plugins
     });
@@ -39,7 +41,6 @@ export async function buildIIFE({ input, outputFile, externals = {}, isCompact =
     await bundle.write({
         file: outputFile,
         format: "iife",
-        globals: externals,
-        compact: isCompact
+        compact: true
     });
 }

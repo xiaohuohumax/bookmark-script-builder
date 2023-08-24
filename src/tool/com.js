@@ -1,4 +1,4 @@
-import msg from "./msg";
+import notify from "./notify";
 
 /**@param {string} selectors*/
 export function q(selectors) {
@@ -12,25 +12,36 @@ export function qa(selectors) {
 export function sleep(ms) {
     return new Promise(res => setTimeout(res, ms));
 }
+export class BScript {
+    static flagKey = "___tag_script_flag___";
+    static matchUrl = [];
+    static unMatchMsg = "";
 
-const scriptKey = "___tag_script_flag___";
+    static {
+        BScript.init({});
+    }
 
-export async function start({ matchUrl = [/.*/ig], unmatchMsg = "" }, runCallback = async () => { }) {
-    const matchRe = matchUrl.find(re => location.href.match(re) != null);
-    if (matchRe == null) {
-        msg({ title: unmatchMsg, icon: "error" });
-        return;
+    /**@param {{ matchUrl:RegExp[], unMatchMsg:string }} options */
+    static init({ matchUrl = [/.*/ig], unMatchMsg = "请到目标网页再试试" }) {
+        BScript.matchUrl = matchUrl;
+        BScript.unMatchMsg = unMatchMsg;
+        return BScript;
     }
-    if (typeof (runCallback) !== "function") {
-        return;
-    }
-    if (window[scriptKey] === true) {
-        return;
-    }
-    window[scriptKey] = true;
-    try {
-        return await runCallback();
-    } finally {
-        window[scriptKey] = false;
+
+    static async run(callback = async () => { }) {
+        const matchRe = BScript.matchUrl.find(re => location.href.match(re) != null);
+        if (matchRe == null) {
+            notify.failure(BScript.unMatchMsg, { plainText: false });
+            return;
+        }
+        if (window[BScript.flagKey] === true) {
+            return;
+        }
+        window[BScript.flagKey] = true;
+        try {
+            return await callback();
+        } finally {
+            window[BScript.flagKey] = false;
+        }
     }
 }

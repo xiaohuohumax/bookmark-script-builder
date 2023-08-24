@@ -2,4 +2,4 @@ dist
 node_modules
 
 # private scripts
-src/script/tag script
+src/script/private script

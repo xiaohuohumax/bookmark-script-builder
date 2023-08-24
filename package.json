@@ -17,6 +17,7 @@
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.0",
+    "@rollup/plugin-terser": "^0.4.3",
     "autoprefixer": "^10.4.15",
     "chalk": "^5.3.0",
     "cssnano": "^6.0.1",
@@ -26,12 +27,20 @@
     "mime-types": "^2.1.35",
     "npm": "^9.8.1",
     "postcss": "^8.4.28",
+    "postcss-import": "^15.1.0",
     "rollup": "^3.28.0",
     "rollup-plugin-alias": "^2.2.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-postcss": "^4.0.2"
   },
   "dependencies": {
+    "axios": "^1.4.0",
+    "file-saver": "^2.0.5",
+    "js-cookie": "^3.0.5",
+    "jszip": "github:Stuk/jszip",
+    "lodash": "^4.17.21",
+    "notiflix": "^3.2.6",
+    "p-limit": "^4.0.0",
     "sweetalert2": "^11.7.25"
   }
 }
