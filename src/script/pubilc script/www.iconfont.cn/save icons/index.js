@@ -6,25 +6,30 @@
  * #isuse true
  */
 
-import Axios from "axios";
+import axios from "axios";
 import Cookies from "js-cookie";
-import _ from "lodash";
-import FileSaver from "file-saver";
-import pLimit from "p-limit";
 import JSZip from "jszip";
-import notify from "@/tool/notify";
-import swal from "@/tool/swal";
-import { q, qa, BScript } from "@/tool/com";
+import chunk from "lodash/chunk";
+
+import { lg, notify, swal } from "@/tool/base";
+import { q, qa, BScript } from "@/tool/core";
+import { dlAndZipByTask, DTask, DFile } from "@/tool/dl";
+
 import dConfig from "./index.json";
 import "./index.css";
 
+// 类型映射
 const typeMap = {
     svg: "SVG",
     eps: "AI",
     png: "PNG"
 };
 
-async function setConfig() {
+/**
+ * 用户设置下载配置
+ * @returns 配置信息
+ */
+async function loadConfig() {
     return swal.fire({
         title: "设置",
         html: `<div class='icon-form'>
@@ -63,7 +68,7 @@ async function setConfig() {
 
             return {
                 ...dConfig,
-                type: Array.from(qa("input[name='icon-type']")).find(item => item.checked).value,
+                type: qa("input[name='icon-type']").find(item => item.checked).value,
                 color,
                 size
             };
@@ -71,33 +76,61 @@ async function setConfig() {
     });
 }
 
-async function downloadItemZip(iconIds, config, ctoken) {
-    const { data } = await Axios({
-        url: "/api/icon/downloadIcon",
-        method: "get",
-        responseType: "blob",
-        params: {
-            type: config.type,
-            ids: iconIds.map(icon => icon.trim() + "|-1").join(","),
-            color: config.color,
-            size: config.size,
-            ctoken
-        }
-    });
-
-    if (!(data instanceof Blob)) {
-        notify.failure(data.message);
-        return [];
+/**
+ * 图标下载任务
+ */
+class DIconZipTask extends DTask {
+    /**
+     * @param {string[]} iconIds 图标 ID 集合
+     * @param {dConfig} config 下载配置
+     * @param {string} ctoken token
+     * @param {number} index 任务 index
+     * @param {number} zipCount 图包总数统计
+     */
+    constructor(iconIds, config, ctoken, index, zipCount) {
+        super();
+        this.iconIds = iconIds;
+        this.config = config;
+        this.ctoken = ctoken;
+        this.index = index;
+        this.zipCount = zipCount;
     }
 
-    const itemZip = new JSZip();
-    const itemZipData = await (itemZip.loadAsync(data));
-    return Object.keys(itemZipData.files)
-        .filter(file => !itemZip.files[file].dir)
-        .map(file => ({
-            fName: file.split("/").reverse()[0],
-            fBlob: itemZip.files[file].async("blob")
-        }));
+    /**
+     * 下载图包, 每次100枚
+     */
+    async run() {
+        notify.info(`正在下载:${this.index + 1}/${this.zipCount}`);
+        // 下载
+        const { data } = await axios({
+            url: "/api/icon/downloadIcon",
+            method: "get",
+            responseType: "blob",
+            params: {
+                type: this.config.type,
+                ids: this.iconIds.map(icon => icon.trim() + "|-1").join(","),
+                color: this.config.color,
+                size: this.config.size,
+                ctoken: this.ctoken
+            }
+        });
+
+        // 异常下载
+        if (!(data instanceof Blob)) {
+            notify.failure(data.message);
+            lg.error(data.message);
+            return;
+        }
+
+        const { files } = await (JSZip.loadAsync(data));
+
+        Object.entries(files)
+            .filter(file => !file[1].dir)
+            .forEach(file => {
+                // 提取图包中图标数据到总包中
+                this.saveFile(new DFile(file[0].split("/").pop(), file[1].async("blob")));
+            });
+    }
 }
 
 const script = BScript.init({
@@ -106,42 +139,40 @@ const script = BScript.init({
 });
 
 script.run(async () => {
+    lg.info("开始下载");
     // 设置参数
     /**@type {{value:dConfig}} */
-    const { value: config, isConfirmed } = await setConfig();
+    const { value: config, isConfirmed } = await loadConfig();
     if (!isConfirmed) {
         notify.warning("已取消!");
         return;
     }
+
     notify.info(`类型:${typeMap[config.type]},颜色:${config.color || "默认"},大小:${config.size}`);
+    lg.debug("参数: " + JSON.stringify(config));
+
     // 全部图标的id
-    const iconIds = Array.from(document.querySelectorAll("li[class^='J_icon_id_']"))
-        .map(item => item.className.trim().slice(10, 18));
+    const iconIds = qa("li[class^='J_icon_id_']").map(item => item.className.trim().slice(10, 18));
+    lg.debug("图标ID集合: " + iconIds);
 
     const downloadCount = 100;
     // 获取库的名称
     const iconTitle = q(".title > span").innerText;
     const zipCount = Math.ceil(iconIds.length / downloadCount);
     const ctoken = Cookies.get("ctoken");
-    const allZip = new JSZip();
+    lg.debug("ctoken: " + ctoken);
 
-    // 同时下载数
-    const limit = pLimit(3);
+    const fileName = `${iconTitle}.${typeMap[config.type].toLocaleLowerCase()}`;
+    lg.debug("文件名: " + fileName);
 
-    const results = await Promise.all(_.chunk(iconIds, downloadCount)
-        .map((iconIds, index) => limit(async () => {
-            notify.info(`正在下载:${index + 1}/${zipCount}`);
-            return downloadItemZip(iconIds, config, ctoken);
-        })));
+    // 创建下载任务
+    const tasks = chunk(iconIds, downloadCount)
+        .map((iconIds, index) => new DIconZipTask(iconIds, config, ctoken, index, zipCount));
 
-    results.flat(Infinity).forEach(files => allZip.file(files.fName, files.fBlob));
+    await dlAndZipByTask(tasks, fileName, 3);
 
-    // 保存
-    const content = await allZip.generateAsync({ type: "blob" });
-    FileSaver.saveAs(content, `${iconTitle}.${typeMap[config.type].toLocaleLowerCase()}.zip`);
-
-    notify.success("下载完成!");
+    notify.success("下载完成!", { closeButton: true });
 }).catch(err => {
     notify.failure("存在异常!!!");
-    throw err;
+    lg.error(err);
 });

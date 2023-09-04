@@ -3,11 +3,18 @@
         "browser": true,
         "es2021": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings"
+    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+    "plugins": [
+        "import"
+    ],
     "rules": {
         "key-spacing": [
             "error",
@@ -31,6 +38,44 @@
             "error",
             "always"
         ],
-        "no-undef": "off"
+        "no-undef": "off",
+        "import/order": [
+            "error",
+            {
+                "groups": [
+                    "builtin",
+                    "external",
+                    "internal",
+                    "parent",
+                    "sibling",
+                    "index",
+                    "unknown"
+                ],
+                "pathGroups": [
+                    {
+                        "pattern": "@/**",
+                        "group": "internal"
+                    },
+                    {
+                        "pattern": "#/**",
+                        "group": "internal"
+                    }
+                ],
+                "alphabetize": {
+                    "order": "asc"
+                },
+                "newlines-between": "always"
+            }
+        ],
+        "import/no-unresolved": [
+            2,
+            {
+                "ignore": [
+                    "^@/",
+                    "^#/",
+                    "^virtual:"
+                ]
+            }
+        ]
     }
 }

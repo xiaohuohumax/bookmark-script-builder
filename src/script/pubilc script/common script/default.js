@@ -6,14 +6,17 @@
  * #isuse true
  */
 
-import { BScript } from "@/tool/com";
-import notify from "@/tool/notify";
+import meta from "virtual:meta";
+
+import { lg, notify } from "@/tool/base";
+import { BScript } from "@/tool/core";
 
 const script = BScript.init({ matchUrl: [/.*/ig] });
 
 script.run(async () => {
     notify.success("这里啥也没有!!");
+    notify.info("meta: " + JSON.stringify(meta));
 }).catch(err => {
     notify.failure("存在异常!!!");
-    throw err;
+    lg.error(err);
 });

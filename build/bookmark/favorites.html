@@ -1,0 +1,327 @@
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<title>[{title}]</title>
+<link rel="shortcut icon" href="[{icon}]">
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    html {
+        font-size: 18px;
+    }
+
+    body {
+        background-color: #0093E9;
+        background: linear-gradient(36deg, #212d33, #2b3b42);
+    }
+
+    li {
+        list-style-type: none;
+    }
+
+    a {
+        display: inline-block;
+        color: #212d33;
+        text-decoration: none;
+        padding: .25em 0;
+        margin: .25em;
+    }
+
+    a:hover {
+        color: #32c682;
+    }
+
+    input[type="checkbox"] {
+        width: 0;
+        margin: 0 1em;
+        vertical-align: middle;
+        outline: none;
+    }
+
+    input[type="checkbox"]::after {
+        display: block;
+        font-size: 1.35em;
+        transform: translate(-.5em, -.45em);
+        cursor: pointer;
+    }
+
+    input[type="checkbox"]:checked::after {
+        content: "📂";
+    }
+
+    input[type="checkbox"]:not(:checked)::after {
+        content: "📁";
+    }
+
+    h3:has(:not(input[type="checkbox"]:checked))~dl {
+        display: none;
+    }
+
+    dl {
+        padding-left: .5em;
+        margin-left: 1.5em;
+        border-left: 2px dashed gray;
+    }
+
+    body>dl {
+        padding-left: 0;
+        margin-left: 0;
+        border-left: none;
+        padding: .5em 1em 4.5em;
+        margin: 2em 3em;
+        background: linear-gradient(120deg, #fff, #f0f0f0);
+        border-radius: 40%/4em;
+        border-top-left-radius: 1.5em;
+        border-top-right-radius: 1.5em;
+        position: relative;
+        min-height: 8em;
+    }
+
+    body>dl::after {
+        content: "🔖";
+        font-size: 5em;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    dt>h3 {
+        margin: 1em .7em;
+        padding-left: .5em;
+        position: relative;
+    }
+
+    dt>h3::before {
+        content: "";
+        position: absolute;
+        right: 100%;
+        top: 0;
+        width: 3px;
+        height: 100%;
+        background-color: #32c682;
+        border-radius: 2px;
+    }
+
+    dt>a>i {
+        display: inline-block;
+        vertical-align: middle;
+        width: 1.25em;
+        height: 1.25em;
+        margin-bottom: .08em;
+        margin-right: .25em;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    header {
+        border-radius: 50%/2em;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        background: linear-gradient(120deg, #fff, #f1f1f1);
+        padding: 2em 3em 3em;
+        display: flex;
+        box-shadow: 0 0 2em -1em rgba(0, 0, 0, .2)
+    }
+
+    .header-left {
+        width: 4em;
+        height: 4em;
+        background: url('[{icon}]') no-repeat center #f1f1f1;
+        background-size: 70% 70%;
+        border-radius: 50%;
+        padding: 1em;
+    }
+
+    .header-right {
+        margin-left: 2em;
+    }
+
+    .header-right ul {
+        margin-top: 1em;
+        font-size: .8em;
+    }
+
+    footer {
+        padding: 4em;
+        background: #28363d;
+        font-size: .8em;
+    }
+
+    .footer-config {
+        display: flex;
+        font-weight: bold;
+        color: #32c682;
+    }
+
+    .footer-config>div {
+        margin-right: 2em;
+    }
+
+    .footer-config>div>span {
+        font-weight: normal;
+    }
+
+    footer hr {
+        border: dashed #515e646e;
+        border-width: 1px 0 0;
+        margin: .5em 0;
+    }
+
+    .footer-app {
+        color: #515e64;
+        font-size: .5em;
+    }
+
+    section {
+        margin: 1em 3em;
+        border-radius: 1em;
+        padding: 0 1em;
+        background: linear-gradient(120deg, #fff, #f1f1f1);
+        display: flex;
+        align-items: center;
+    }
+
+    section input[type="text"] {
+        display: block;
+        border: none;
+        color: #32c682;
+        line-height: 3em;
+        height: 3em;
+        border-radius: 8px;
+        font-size: 1em;
+        padding: .5em 1em;
+        outline: none;
+        font-weight: bold;
+        flex-shrink: 1;
+        flex-grow: 1;
+    }
+
+    section input[type="checkbox"] {
+        margin: 0 1em 8px;
+    }
+
+    section input[type="checkbox"]::after {
+        font-size: 2em;
+    }
+
+    dt {
+        display: none;
+    }
+
+    h3[selected]~dl dt {
+        display: block;
+    }
+
+    dt:has(h3[selected], a[selected]) {
+        display: block;
+    }
+
+    body>dl:not(:has(h3[selected], a[selected]))::before {
+        content: "404 👽";
+        font-size: 2em;
+        position: absolute;
+        color: #32c682;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+    }
+
+    .header-loading {
+        position: fixed;
+        z-index: 100;
+        background-color: #28363d;
+        opacity: .98;
+        top: 0;
+        left: 0;
+        animation: loading 1.5s forwards ease-in-out;
+    }
+    
+    @keyframes loading {
+        0% {
+            opacity: 1;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        99% {
+            opacity: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        100% {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+    }
+</style>
+<header>
+    <div class="header-loading"></div>
+    <div class="header-left"></div>
+    <div class="header-right">
+        <H1>[{name}]</H1>
+        <p>🎉🎉🎉🎉🎉🎉</p>
+        <ul>
+            <li><B>全部导入: </B><SPAN>浏览器书签导入此文件</SPAN></li>
+            <li><B>单独添加: </B><SPAN>按住链接拖入书签栏中</SPAN></li>
+        </ul>
+    </div>
+</header>
+<section>
+    <input type="checkbox" id="check-all" checked>
+    <input type="text" placeholder="搜索🔍" id="search" />
+</section>
+[{bookmark}]
+<footer>
+    <div class="footer-config">
+        <div>构建时间: <span>[{time}]</span></div>
+        <div>构建模式: <span>[{mode}]</span></div>
+    </div>
+    <hr>
+    <div class="footer-app">
+        <div>power by [{pname}]</div>
+        <div>version [{version}]</div>
+        <div>author [{author}]</div>
+    </div>
+</footer>
+<script>
+    const links = document.querySelectorAll("dt>a");
+    const h3s = document.querySelectorAll("dt>h3");
+    links.forEach((element) => {
+        const i = document.createElement("i");
+        const icon = element.getAttribute("icon")?.trim();
+        if (icon) {
+            i.style.background = `url(${icon}) no-repeat 0 0 / cover`;
+        }
+        element.setAttribute("selected", true)
+        element.prepend(i);
+    });
+
+    h3s.forEach((element, index) => {
+        if (index == 0) return;
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.setAttribute("checked", true);
+        element.appendChild(input);
+    });
+
+    const checkAll = document.getElementById("check-all");
+    const search = document.getElementById("search");
+    const cheakItems = document.querySelectorAll("dt input[type='checkbox']");
+
+    checkAll.addEventListener("change", () =>
+        cheakItems.forEach(item => item.checked = checkAll.checked)
+    );
+
+    search.addEventListener("input", () =>
+        [...links, ...h3s].forEach(i =>
+            i.innerText.includes(search.value)
+                ? i.setAttribute("selected", true)
+                : i.removeAttribute("selected")
+        )
+    )
+</script>

@@ -1,3 +1,4 @@
+
 # 🔖 bookmark script builder 🔖
 
 **书签脚本打包工具**
@@ -30,8 +31,9 @@ npm run build
 
 ```text
 dist
- ├── console            // 控制台-版本(复制代码F12执行)
- ├── bookmark           // 书签-版本(自行创建标签, 将代码填写到URL)
+ ├── ...            
+ |   ├── bookmark.txt   // 书签-版本(自行创建标签, 将代码填写到URL)
+ |   └── console.js     // 控制台-版本(复制代码F12执行)
  └── favorites.html     // 全部书签HTML(可全部导入浏览器书签, 也可按住链接单独拖入书签栏)
 ```
 

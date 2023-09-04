@@ -1,5 +1,6 @@
 dist
 node_modules
+env/*.local
 
 # private scripts
 src/script/private script

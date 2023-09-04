@@ -6,9 +6,9 @@
  * #isuse true
  */
 
-import { BScript } from "@/tool/com";
-import swal from "@/tool/swal";
-import notify from "@/tool/notify";
+import { lg, notify, swal } from "@/tool/base";
+import { BScript } from "@/tool/core";
+
 import dConfig from "./clock.json";
 
 const script = BScript.init({ matchUrl: [/.*/ig] });
@@ -19,5 +19,5 @@ script.run(async () => {
     swal.fire({ title: "提示", icon: "success", html: timHtml, confirmButtonText: "确定" });
 }).catch(err => {
     notify.failure("存在异常!!!");
-    throw err;
+    lg.error(err);
 });
