@@ -25,7 +25,7 @@ npm run build
 
 ### 预览脚本
 
-浏览器直接打开 [🔖书签](./dist/favorites.html)
+浏览器直接打开 [🔖书签: dist/favorites.html](./dist/favorites.html)
 
 ## 🌳 打包结果结构
 
@@ -40,6 +40,7 @@ dist
 ## 👇 已实现-书签脚本
 
 + [阿里巴巴矢量图标库一键下载](./src/script/pubilc%20script/www.iconfont.cn/save%20icons/index.js)
++ [Github仓库信息查询](./src/script/pubilc%20script/github.com/show%20repositories%20info/index.js)
 
 ## 🪧 其他
 
