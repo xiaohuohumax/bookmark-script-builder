@@ -1,0 +1,54 @@
+[
+  {
+    "name": "玩的嗨",
+    "api": "http://tv.wandhi.com/go.html?url=%url%"
+  },
+  {
+    "name": "JY",
+    "api": "https://jx.playerjy.com/?url=%url%"
+  },
+  {
+    "name": "云析",
+    "api": "https://jx.yparse.com/index.php?url=%url%"
+  },
+  {
+    "name": "8090g",
+    "api": "https://www.8090g.cn/?url=%url%"
+  },
+  {
+    "name": "全能vip接口",
+    "api": "https://www.8090.la/8090/?url=%url%"
+  },
+  {
+    "name": "eptept",
+    "api": "https://dmjx.m3u8.tv/?url=%url%"
+  },
+  {
+    "name": "咸鱼云解析",
+    "api": "http://jx.ppflv.com/?url=%url%"
+  },
+  {
+    "name": "虾米解析",
+    "api": "https://jx.xmflv.com/?url=%url%"
+  },
+  {
+    "name": "play",
+    "api": "https://www.playm3u8.cn/jiexi.php?url=%url%"
+  },
+  {
+    "name": "夜幕",
+    "api": "https://www.yemu.xyz/?url=%url%"
+  },
+  {
+    "name": "TV解析",
+    "api": "https://jx.m3u8.tv/jiexi/?url=%url%"
+  },
+  {
+    "name": "冰豆",
+    "api": "https://api.qianqi.net/vip/?url=%url%"
+  },
+  {
+    "name": "七哥",
+    "api": "https://jx.mmkv.cn/tv.php?url=%url%"
+  }
+]

@@ -41,6 +41,7 @@ dist
 
 + [阿里巴巴矢量图标库一键下载](./src/script/pubilc%20script/www.iconfont.cn/save%20icons/index.js)
 + [Github仓库信息查询](./src/script/pubilc%20script/github.com/show%20repos%20info/index.js)
++ [vip视频解析](./src/script/pubilc%20script/vip/vip%20video/index.js)
 
 ## 🪧 其他
 
