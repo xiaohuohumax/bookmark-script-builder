@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 2.0.1
+
+### Patch Changes
+
+- [`beb0062`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/beb0062c7674cb753b6bbe3e248a54d4dd792e6f) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - 依赖修改
+
 ## 2.0.0
 
 ### Major Changes
