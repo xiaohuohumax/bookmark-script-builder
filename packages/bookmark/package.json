@@ -1,0 +1,46 @@
+{
+  "name": "@xiaohuohumax/bookmark",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "浏览器书签构建工具",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c --watch --watch.include src/**"
+  },
+  "keywords": [
+    "bookmark",
+    "builder",
+    "web"
+  ],
+  "author": "xiaohuohumax",
+  "license": "MIT",
+  "homepage": "https://github.com/xiaohuohumax/bookmark-script-builder/blob/main/packages/bookmark#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaohuohumax/bookmark-script-builder.git",
+    "directory": "packages/bookmark"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.12.1",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-esbuild": "^6.1.1"
+  },
+  "files": [
+    "dist"
+  ]
+}

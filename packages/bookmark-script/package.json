@@ -1,0 +1,77 @@
+{
+  "name": "@xiaohuohumax/bookmark-script",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "签脚本打包工具cli",
+  "scripts": {
+    "build": "rimraf dist && rollup -c",
+    "dev": "rollup -c --watch --watch.include src/**"
+  },
+  "keywords": [
+    "bookmark-script",
+    "rollup",
+    "web",
+    "bookmark",
+    "cli"
+  ],
+  "author": "xiaohuohumax",
+  "license": "MIT",
+  "homepage": "https://github.com/xiaohuohumax/bookmark-script-builder/blob/main/packages/bookmark-script#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaohuohumax/bookmark-script-builder.git",
+    "directory": "packages/bookmark-script"
+  },
+  "bin": {
+    "bookmark-script": "bookmark-script.mjs"
+  },
+  "dependencies": {
+    "@xiaohuohumax/bookmark": "workspace:^"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-typescript": "^7.23.3",
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/babel__core": "^7.20.5",
+    "@types/dotenv-parse-variables": "^2.0.3",
+    "@types/mime-types": "^2.1.4",
+    "@types/progress": "^2.0.7",
+    "@types/yargs": "^17.0.32",
+    "chalk": "^5.3.0",
+    "dotenv": "^16.4.5",
+    "dotenv-parse-variables": "^2.0.0",
+    "mime-types": "^2.1.35",
+    "p-limit": "^4.0.0",
+    "progress": "^2.0.3",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.12.1",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-esbuild": "^6.1.1",
+    "tslib": "^2.6.2",
+    "yargs": "^17.7.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "*.d.ts",
+    "*.mjs"
+  ]
+}

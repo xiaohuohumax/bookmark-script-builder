@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "types": [
+      "@xiaohuohumax/bookmark-script/client"
+    ],
+  },
+  "include": [
+    "src/**/*",
+    "*.d.ts",
+    "types/**/*"
+  ],
+  "exclude": [
+    "dist"
+  ]
+}

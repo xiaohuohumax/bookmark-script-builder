@@ -1,0 +1,52 @@
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! -->
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<style>
+  * {
+      padding: 0;
+      margin: 0;
+  }
+
+  body {
+      padding: 2em;
+  }
+
+  dl>dt:not(:has(h3[personal_toolbar_folder="true"])) {
+      margin-left: 1.25em;
+      padding: .25em 0;
+  }
+
+  dt>h3 {
+      padding-bottom: .25em;
+  }
+
+  a {
+      text-decoration: none;
+  }
+  
+  i {
+      display: inline-block;
+      width: 1.1em;
+      height: 1.1em;
+      margin-right: .25em;
+      vertical-align: middle;
+  }
+</style>
+<TITLE>Bookmark Script</TITLE>
+<H1>Bookmark Script</H1>
+[[bookmark]]
+<script>
+  const links = document.querySelectorAll("dt > a");
+  const h3s = document.querySelectorAll("dt > h3");
+  links.forEach((element) => {
+      const i = document.createElement("i");
+      const icon = element.getAttribute("icon")?.trim();
+      if (icon) {
+          i.style.background = `url(${icon}) no-repeat 0 0 / cover`;
+      }
+      element.setAttribute("selected", true)
+      element.prepend(i);
+  });
+</script>
