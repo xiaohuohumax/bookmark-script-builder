@@ -230,7 +230,6 @@ class Cli {
   private async buildBookmarkScriptAndWrite(bml: BookmarkLinkExt, folder: string): Promise<BuildBMLinkRes> {
     try {
       const res = await this.builder.buildBookmarkScript(bml);
-      this.buildBar.tick(1);
       if ('error' in res) {
         return { ...res, bml };
       }
