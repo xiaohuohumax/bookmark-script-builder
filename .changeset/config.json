@@ -1,11 +1,17 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@1.6.1/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "xiaohuohumax/bookmark-script-builder" }],
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "xiaohuohumax/bookmark-script-builder"
+    }
+  ],
   "commit": false,
   "linked": [],
   "access": "public",
   "updateInternalDependencies": "patch",
   "ignore": [],
+  "baseBranch": "main",
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "updateInternalDependents": "always"
   }

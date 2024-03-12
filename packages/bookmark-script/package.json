@@ -26,9 +26,7 @@
     "bookmark-script": "bookmark-script.mjs"
   },
   "dependencies": {
-    "@xiaohuohumax/bookmark": "workspace:^"
-  },
-  "devDependencies": {
+    "@xiaohuohumax/bookmark": "workspace:^",
     "@babel/core": "^7.24.0",
     "@babel/preset-typescript": "^7.23.3",
     "@rollup/plugin-alias": "^5.1.0",
