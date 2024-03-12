@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 2.0.2
+
+### Patch Changes
+
+- [`be12d8c`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/be12d8c11968d5762ddf9b006d3caf4f556a7d0f) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - 打包进度条显示 BUG 修复
+
 ## 2.0.1
 
 ### Patch Changes
