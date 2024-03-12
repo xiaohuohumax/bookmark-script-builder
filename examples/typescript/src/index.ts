@@ -1,6 +1,8 @@
 /**
  * #name 显示时间
  * #icon ../static/clock.png
+ * #version 1.0.0
+ * #description 显示当前时间
  * #isBuild true
  */
 

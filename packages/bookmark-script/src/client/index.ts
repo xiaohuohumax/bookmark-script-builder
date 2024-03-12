@@ -128,16 +128,16 @@ class Cli {
    * @param bml 书签信息
    * @returns 书签banner
    */
-  private bmlToBanner(bml: BookmarkLinkExt) {
+  private bmlToBanner(bml: BookmarkLinkExt): string {
     if (!this.options.banner) {
-      return this.options.banner;
+      return '';
     }
     let banner: string = this.options.banner;
     for (const [key, value] of Object.entries(bml)) {
       banner = banner.replace(`[${key}]`, () => value);
     }
 
-    return banner;
+    return banner.replaceAll(/\[\w+\]/ig, () => '');
   }
 
   /**
@@ -196,9 +196,20 @@ class Cli {
    * @param code 代码
    * @param bml 书签信息
    */
-  private saveBannerAndCodeToFile(file: string, code: string, bml: BookmarkLinkExt) {
+  private saveBannerAndCodeToFile(file: string, code: string, banner: string) {
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, `${this.bmlToBanner(bml)}\n${code}`, 'utf-8');
+    fs.writeFileSync(file, `${banner}\n${code}`, 'utf-8');
+  }
+
+  private bmlNameFormat(bml: BookmarkLinkExt): string {
+    let name = bml.name;
+    if (bml.description && bml.description != '') {
+      name += `[${bml.description}]`;
+    }
+    if (bml.version && bml.version != '') {
+      name += `(${bml.version})`;
+    }
+    return name;
   }
 
   /**
@@ -207,14 +218,14 @@ class Cli {
    * @param folder 父路径
    * @returns 
    */
-  private async buildConsoleScriptAndWrite(bml: BookmarkLinkExt, folder: string): Promise<BuildBMLinkRes> {
+  private async buildConsoleScriptAndWrite(bml: BookmarkLinkExt, folder: string, banner: string): Promise<BuildBMLinkRes> {
     try {
       const res = await this.builder.buildConsoleScript(bml);
       if ('error' in res) {
         return { ...res, bml };
       }
       const file = path.resolve(folder, 'console.js');
-      this.saveBannerAndCodeToFile(file, res.code, bml);
+      this.saveBannerAndCodeToFile(file, res.code, banner);
       return { ...res, bml, kind: BuildBMLinkResKind.Console };
     } finally {
       this.buildBar.tick(1);
@@ -227,7 +238,7 @@ class Cli {
    * @param folder 父路径
    * @returns 
    */
-  private async buildBookmarkScriptAndWrite(bml: BookmarkLinkExt, folder: string): Promise<BuildBMLinkRes> {
+  private async buildBookmarkScriptAndWrite(bml: BookmarkLinkExt, folder: string, banner: string): Promise<BuildBMLinkRes> {
     try {
       const res = await this.builder.buildBookmarkScript(bml);
       if ('error' in res) {
@@ -236,7 +247,7 @@ class Cli {
       const file = path.resolve(folder, 'bookmark.txt');
       // HTML标签转换
       bml.href = res.code.replaceAll('&', () => '&amp;');
-      this.saveBannerAndCodeToFile(file, res.code, bml);
+      this.saveBannerAndCodeToFile(file, res.code, banner);
       return { ...res, bml, kind: BuildBMLinkResKind.Bookmark };
     } finally {
       this.buildBar.tick(1);
@@ -262,15 +273,15 @@ class Cli {
       if (bml.icon && fs.existsSync(bml.icon)) {
         bml.icon = fileToBase64(bml.icon);
       }
-
-      // 文件夹名称
-      let name = bml.name;
-      bml.description && (name += `[${bml.description}]`);
-      bml.version && (name += `(${bml.version})`);
+      
+      const banner = this.bmlToBanner(bml);
+      const name = this.bmlNameFormat(bml);
       const folder = path.resolve(...parents, name);
 
-      this.buildJobs.push(this.limit((b, f) => this.buildConsoleScriptAndWrite(b, f), bml, folder));
-      this.buildJobs.push(this.limit((b, f) => this.buildBookmarkScriptAndWrite(b, f), bml, folder));
+      bml.name = name;
+
+      this.buildJobs.push(this.limit((bm, f, ba) => this.buildConsoleScriptAndWrite(bm, f, ba), bml, folder, banner));
+      this.buildJobs.push(this.limit((bm, f, ba) => this.buildBookmarkScriptAndWrite(bm, f, ba), bml, folder, banner));
     }
   }
 

@@ -26,5 +26,6 @@ javascript:(function(){alert("Hello, World!");})();void(0);
 
 ## 最后
 
+**PS:** 原来的书签脚本已经迁移至 [bookmark-script](https://github.com/xiaohuohumax/bookmark-script)
 
 玩的开心 🎉🎉🎉🎉
