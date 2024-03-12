@@ -4,6 +4,7 @@
   "type": "module",
   "version": "2.0.0",
   "description": "浏览器书签脚本工具",
+  "packageManager": "pnpm@8.15.4",
   "scripts": {
     "bookmark:dev": "pnpm -C packages/bookmark run dev",
     "bookmark-script:dev": "pnpm -C packages/bookmark-script run dev",
