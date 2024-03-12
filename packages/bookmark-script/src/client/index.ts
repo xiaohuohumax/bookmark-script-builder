@@ -208,13 +208,17 @@ class Cli {
    * @returns 
    */
   private async buildConsoleScriptAndWrite(bml: BookmarkLinkExt, folder: string): Promise<BuildBMLinkRes> {
-    const res = await this.builder.buildConsoleScript(bml);
-    if ('error' in res) {
-      return { ...res, bml };
+    try {
+      const res = await this.builder.buildConsoleScript(bml);
+      if ('error' in res) {
+        return { ...res, bml };
+      }
+      const file = path.resolve(folder, 'console.js');
+      this.saveBannerAndCodeToFile(file, res.code, bml);
+      return { ...res, bml, kind: BuildBMLinkResKind.Console };
+    } finally {
+      this.buildBar.tick(1);
     }
-    const file = path.resolve(folder, 'console.js');
-    this.saveBannerAndCodeToFile(file, res.code, bml);
-    return { ...res, bml, kind: BuildBMLinkResKind.Console };
   }
 
   /**
@@ -224,15 +228,20 @@ class Cli {
    * @returns 
    */
   private async buildBookmarkScriptAndWrite(bml: BookmarkLinkExt, folder: string): Promise<BuildBMLinkRes> {
-    const res = await this.builder.buildBookmarkScript(bml);
-    if ('error' in res) {
-      return { ...res, bml };
+    try {
+      const res = await this.builder.buildBookmarkScript(bml);
+      this.buildBar.tick(1);
+      if ('error' in res) {
+        return { ...res, bml };
+      }
+      const file = path.resolve(folder, 'bookmark.txt');
+      // HTML标签转换
+      bml.href = res.code.replaceAll('&', () => '&amp;');
+      this.saveBannerAndCodeToFile(file, res.code, bml);
+      return { ...res, bml, kind: BuildBMLinkResKind.Bookmark };
+    } finally {
+      this.buildBar.tick(1);
     }
-    const file = path.resolve(folder, 'bookmark.txt');
-    // HTML标签转换
-    bml.href = res.code.replaceAll('&', () => '&amp;');
-    this.saveBannerAndCodeToFile(file, res.code, bml);
-    return { ...res, bml, kind: BuildBMLinkResKind.Bookmark };
   }
 
   /**
