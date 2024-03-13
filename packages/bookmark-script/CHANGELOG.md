@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 2.0.5
+
+### Patch Changes
+
+- [`da6976e`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/da6976e7284fbbc62b4e2d26901642b076185792) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - 书签版本代码排除注释信息
+
 ## 2.0.4
 
 ### Patch Changes
