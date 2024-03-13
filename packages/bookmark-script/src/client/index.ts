@@ -273,7 +273,7 @@ class Cli {
       if (bml.icon && fs.existsSync(bml.icon)) {
         bml.icon = fileToBase64(bml.icon);
       }
-      
+
       const banner = this.bmlToBanner(bml);
       const name = this.bmlNameFormat(bml);
       const folder = path.resolve(...parents, name);

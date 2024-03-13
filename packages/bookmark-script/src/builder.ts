@@ -1,8 +1,8 @@
-import terser from '@rollup/plugin-terser';
+import terser, { Options as terserOptions } from '@rollup/plugin-terser';
 import { BookmarkLink as BML, BookmarkFolder as BF, BuildOptions } from '@xiaohuohumax/bookmark';
 import { Plugin } from 'rollup';
 
-import {  buildScript, BuildScriptRes, DefinePluginOptions } from './rollup';
+import { buildScript, BuildScriptRes, DefinePluginOptions } from './rollup';
 import meta from './rollup/plugins/virtual';
 
 export { isBookmarkFolder, isBookmarkLink } from '@xiaohuohumax/bookmark';
@@ -148,7 +148,11 @@ export class BookmarkScriptBuilder {
       input: bml.href,
       plugins: [
         meta(BOOKMARK_META, bml),
-        terser(),
+        terser(<terserOptions>{
+          format: {
+            comments: false
+          }
+        }),
         ...this.options.plugins
       ],
       definePluginOptions: this.options.definePluginOptions,
