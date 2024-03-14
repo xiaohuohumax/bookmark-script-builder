@@ -8,7 +8,7 @@ interface ImportMeta {
 }
 
 declare module 'bookmark:meta' {
-  const meta: import('./dist/options').BookmarkLinkExt;
+  const meta: import('./dist/builder').BookmarkLinkExt;
   export default meta;
 }
 

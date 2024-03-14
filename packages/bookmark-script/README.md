@@ -155,9 +155,9 @@ alert('....')
  */
 
 // ts 提示未定义 则在 tsconfig.json 的 types 添加 @xiaohuohumax/bookmark-script/client 即可
-import { name, icon, ... } from 'bookmark:meta';
+import meta from 'bookmark:meta';
 
-console.log(name, icon);
+console.log(meta.name, meta.icon);
 // **注意**
 // href 会变为完整路径
 // icon 则会变为 base64 字符
