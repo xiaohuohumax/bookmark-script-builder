@@ -77,12 +77,10 @@ alert(new Date());
 
 修改 `package.json`
 
+使用 npx bookmark-script --help 可查看其他配置
 ```json
 {
-  // ...
   "scripts": {
-    // 默认参数 bookmark-script
-    // 使用 npx bookmark-script --help 可查看其他配置
     "build": "bookmark-script"
   },
 }
