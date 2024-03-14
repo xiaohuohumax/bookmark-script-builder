@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 2.0.6
+
+### Patch Changes
+
+- [`52469d1`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/52469d1082658089f5a72367392a7e35b8da52a9) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - bookmark:meta 定义 BUG 修复
+
 ## 2.0.5
 
 ### Patch Changes
