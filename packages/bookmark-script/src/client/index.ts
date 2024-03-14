@@ -86,6 +86,7 @@ interface BuildBMLinkBaseRes {
  */
 interface BuildBMLinkResWithError extends BuildScriptResWithError, Partial<BuildBMLinkBaseRes> {
   bml: BookmarkLinkExt
+  kind: BuildBMLinkResKind
 }
 
 /**
@@ -222,7 +223,7 @@ class Cli {
     try {
       const res = await this.builder.buildConsoleScript(bml);
       if ('error' in res) {
-        return { ...res, bml };
+        return { ...res, bml, kind: BuildBMLinkResKind.Console };
       }
       const file = path.resolve(folder, 'console.js');
       this.saveBannerAndCodeToFile(file, res.code, banner);
@@ -242,7 +243,7 @@ class Cli {
     try {
       const res = await this.builder.buildBookmarkScript(bml);
       if ('error' in res) {
-        return { ...res, bml };
+        return { ...res, bml, kind: BuildBMLinkResKind.Bookmark };
       }
       const file = path.resolve(folder, 'bookmark.txt');
       // HTML标签转换
@@ -310,17 +311,23 @@ class Cli {
    * 打印打包结果
    */
   private printBuildStatInfo() {
-    const infos = this.buildJobsRes.map(j => {
-      return Object.assign({
-        'name': j.bml.name,
-        'type': j.kind
-      }, ('error' in j)
-        ? {
-          'stat': 'Fail',
-          'error': j.error.message
-        } : {
-          'stat': 'Success',
-        });
+    interface Info {
+      name: string
+      stat: string
+      error?: string
+      type: string
+    }
+    const infos: Info[] = this.buildJobsRes.map(j => {
+      const res: Info = {
+        name: j.bml.name,
+        type: j.kind.toString(),
+        stat: 'Success',
+      };
+      if ('error' in j) {
+        res['error'] = j.error.message;
+        res['stat'] = 'Fail';
+      }
+      return res;
     });
     console.table(infos, ['name', 'stat', 'type', 'error']);
 

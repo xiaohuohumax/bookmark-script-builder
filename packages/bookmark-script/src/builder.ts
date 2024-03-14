@@ -11,7 +11,13 @@ export { isBookmarkFolder, isBookmarkLink } from '@xiaohuohumax/bookmark';
  * 书签
  */
 export interface BookmarkLinkExt extends BML {
+  /**
+   * 是否构建
+   */
   isBuild?: boolean
+  /**
+   * 版本
+   */
   version?: string
   /**
    * 书签描述
@@ -23,6 +29,9 @@ export interface BookmarkLinkExt extends BML {
  * 文件夹
  */
 export interface BookmarkFolderExt<C = BookmarkExt> extends BF<C> {
+  /**
+   * 是否构建
+   */
   isBuild?: boolean
   /**
    * 书签描述
