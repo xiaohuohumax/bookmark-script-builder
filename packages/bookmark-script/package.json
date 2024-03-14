@@ -1,7 +1,7 @@
 {
   "name": "@xiaohuohumax/bookmark-script",
   "type": "module",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "签脚本打包工具cli",
   "scripts": {
     "build": "rimraf dist && rollup -c",
