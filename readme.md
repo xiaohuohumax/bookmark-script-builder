@@ -24,6 +24,12 @@ javascript:(function(){alert("Hello, World!");})();void(0);
 
 **详见:** [书签脚本构建工具](./packages/bookmark-script/README.md)
 
+## 📄 Todo
+
++ [ ] 打包模式修改
+  + [x] **离线:** (打包完无需请求任何资源)书签URL长可离线
+  + [ ] **在线:** (打包完需要请求额外资源)书签URL短需在线
+
 ## 最后
 
 **PS:** 原来的书签脚本已经迁移至 [bookmark-script](https://github.com/xiaohuohumax/bookmark-script)
