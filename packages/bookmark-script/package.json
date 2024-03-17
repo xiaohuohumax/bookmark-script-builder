@@ -2,7 +2,7 @@
   "name": "@xiaohuohumax/bookmark-script",
   "type": "module",
   "version": "2.0.6",
-  "description": "签脚本打包工具cli",
+  "description": "基于 rollup 的书签脚本打包工具 Bookmarklet Cli",
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "dev": "rollup -c --watch --watch.include src/**"
@@ -12,7 +12,8 @@
     "rollup",
     "web",
     "bookmark",
-    "cli"
+    "cli",
+    "bookmarklet"
   ],
   "author": "xiaohuohumax",
   "license": "MIT",

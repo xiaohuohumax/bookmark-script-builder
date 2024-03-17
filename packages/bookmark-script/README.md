@@ -1,6 +1,6 @@
 # @xiaohuohumax/bookmark-script
 
-**基于 `rollup` 的书签脚本打包工具 cli**
+**基于 `rollup` 的书签脚本打包工具 Bookmarklet Cli**
 
 ## 作用
 
