@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 2.0.7
+
+### Patch Changes
+
+- [`cbfe44a`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/cbfe44acbcd8a3f11842755221f37170f812b53f) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - update description
+
 ## 2.0.6
 
 ### Patch Changes
