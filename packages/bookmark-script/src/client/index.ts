@@ -1,4 +1,7 @@
-import { Bookmark, Builder as BookmarkBuilder, RenderHTMLCallbackFuntion } from '@xiaohuohumax/bookmark';
+import {
+  Bookmark, Builder as BookmarkBuilder,
+  BookmarkFolder, RenderHTMLCallbackFuntion
+} from '@xiaohuohumax/bookmark';
 import json from '@rollup/plugin-json';
 import pLimit, { LimitFunction } from 'p-limit';
 import ProgressBar from 'progress';
@@ -318,14 +321,16 @@ class Cli {
      */
     function createTree(root: Bookmark[], parents: string[], bml: BookmarkLinkExt) {
       for (const parent of parents) {
-        const item = root.find(c => c.name == parent);
+        const item = root.find(c => c.name == parent && isBookmarkFolder(c));
         if (!item) {
-          const folder: BookmarkFolderExt = {
+          const folder: BookmarkFolder = {
             name: parent,
             children: []
           };
           root.push(folder);
           root = folder.children;
+        } else {
+          root = (<BookmarkFolder>item).children;
         }
       }
       root.push(bml);
