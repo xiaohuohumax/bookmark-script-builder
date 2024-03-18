@@ -1,5 +1,16 @@
 # @xiaohuohumax/bookmark-script
 
+## 3.0.0
+
+### Major Changes
+
+- [`0e687ba`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/0e687bab07d065a4888ed35c2daf4e31135a3ec2) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - 打包添加 CDN 模式
+
+### Patch Changes
+
+- Updated dependencies [[`0e687ba`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/0e687bab07d065a4888ed35c2daf4e31135a3ec2)]:
+  - @xiaohuohumax/bookmark@2.1.0
+
 ## 2.0.7
 
 ### Patch Changes
