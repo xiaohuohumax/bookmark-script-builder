@@ -1,4 +1,4 @@
-import { ExternalOption, OutputOptions, Plugin, rollup } from 'rollup';
+import { ExternalOption, OutputChunk, OutputOptions, Plugin, rollup } from 'rollup';
 import commonjs, { RollupCommonJSOptions } from '@rollup/plugin-commonjs';
 import resolve, { DEFAULTS, RollupNodeResolveOptions } from '@rollup/plugin-node-resolve';
 import replace, { RollupReplaceOptions } from '@rollup/plugin-replace';
@@ -27,27 +27,7 @@ export interface BuildScriptOptions {
 /**
  * 正常打包输出结果
  */
-export interface BuildScriptBaseRes {
-  /**
-   * 打包结果
-   */
-  code: string
-}
-
-/**
- * 异常打包输出结果
- */
-export interface BuildScriptResWithError extends Partial<BuildScriptBaseRes> {
-  /**
-   * 异常信息
-   */
-  error: Error;
-}
-
-/**
- * 打包输出结果
- */
-export type BuildScriptRes = BuildScriptResWithError | BuildScriptBaseRes;
+export type BuildScriptRes = OutputChunk;
 
 /**
  * 创建rollup打包器
@@ -95,14 +75,10 @@ async function createRollupBuilder(options: BuildScriptOptions) {
  * @returns 打包结果
  */
 export async function buildScript(options: BuildScriptOptions): Promise<BuildScriptRes> {
-  try {
-    const bunde = await createRollupBuilder(options);
-    const { output } = await (bunde.generate)({
-      format: 'iife',
-      ...options.outputOptions,
-    });
-    return { code: output[0].code };
-  } catch (error) {
-    return { error: error as Error };
-  }
+  const bunde = await createRollupBuilder(options);
+  const { output } = await (bunde.generate)({
+    format: 'iife',
+    ...options.outputOptions,
+  });
+  return output[0];
 }

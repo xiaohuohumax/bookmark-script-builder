@@ -1,13 +1,13 @@
-import { Builder as BookmarkBuilder, RenderHTMLCallbackFuntion } from '@xiaohuohumax/bookmark';
+import { Bookmark, Builder as BookmarkBuilder, RenderHTMLCallbackFuntion } from '@xiaohuohumax/bookmark';
 import json from '@rollup/plugin-json';
 import pLimit, { LimitFunction } from 'p-limit';
 import ProgressBar from 'progress';
 
 import {
   BookmarkScriptBuilder, BookmarkExt,
-  BookmarkFolderExt, BookmarkLinkExt, isBookmarkFolder, isBookmarkLink
+  BookmarkFolderExt, BookmarkLinkExt, isBookmarkFolder
 } from '../builder';
-import { BuildScriptResWithError, buildScript } from '../rollup';
+import { buildScript } from '../rollup';
 import { BookmarkScriptOptions, formatConfig } from './options';
 import { loadArgs } from '../args';
 import { Env, loadEnvFile } from '../env';
@@ -41,6 +41,7 @@ function findConfigFileNameInCwd(mode: string) {
  * @returns 配置信息
  */
 async function loadOptionsFile(input: string): Promise<BookmarkScriptOptions> {
+  // 临时配置文件
   const tmp = path.join(path.dirname(input), `bm.config.tmp.${Date.now()}.mjs`);
   try {
     const res = await buildScript({
@@ -53,9 +54,6 @@ async function loadOptionsFile(input: string): Promise<BookmarkScriptOptions> {
       }
     });
 
-    if ('error' in res) {
-      throw res.error;
-    }
     fs.writeFileSync(tmp, res.code);
     const configFileUrl = url.pathToFileURL(tmp);
     return await (await import(configFileUrl.href)).default;
@@ -63,36 +61,42 @@ async function loadOptionsFile(input: string): Promise<BookmarkScriptOptions> {
     fs.unlink(tmp, () => { });
   }
 }
-
 /**
- * 返回结果类型
+ * 打包任务状态值
  */
-enum BuildBMLinkResKind {
-  Console = 'Console',
-  Bookmark = 'Bookmark'
+enum JobResStatus {
+  Create = 'Create',
+  BuildFail = 'BuildFail',
+  BuildSuccess = 'BuildSuccess'
 }
 
 /**
- * 打包成功返回
+ * 打包各个版本代码
  */
-interface BuildBMLinkBaseRes {
-  code: string
+interface JobResCode {
+  console: string
+  bookmark: string
+  bookmarkNetwork: string
+}
+
+/**
+ * 打包任务结果
+ */
+interface JobRes {
+  status: JobResStatus
+  error?: Error
+  code: JobResCode
+}
+
+/**
+ * 打包任务
+ */
+interface Job {
   bml: BookmarkLinkExt
-  kind: BuildBMLinkResKind
+  banner: string
+  parents: string[]
+  res: JobRes
 }
-
-/**
- * 打包失败返回
- */
-interface BuildBMLinkResWithError extends BuildScriptResWithError, Partial<BuildBMLinkBaseRes> {
-  bml: BookmarkLinkExt
-  kind: BuildBMLinkResKind
-}
-
-/**
- * 打包返回
- */
-type BuildBMLinkRes = BuildBMLinkResWithError | BuildBMLinkBaseRes;
 
 /**
  * Cli
@@ -102,12 +106,11 @@ class Cli {
 
   // 并发配置
   private limit: LimitFunction;
-  private buildJobs: Promise<BuildBMLinkRes>[] = [];
-  private buildJobsRes: BuildBMLinkRes[] = [];
+  private jobs: Job[] = [];
 
   // 进度条
   private barMessage = `Building ${chalk.gray('[:bar]')} :rate/bps [:current/:total] :percent :etas`;
-  private buildBar: ProgressBar = new ProgressBar(this.barMessage, {
+  private bar: ProgressBar = new ProgressBar(this.barMessage, {
     complete: '=',
     incomplete: ' ',
     width: 40,
@@ -119,9 +122,12 @@ class Cli {
     this.limit = pLimit(Math.max(this.options.buildLimit, 1));
   }
 
-  private clearup(options: BookmarkScriptOptions) {
-    fs.rmSync(options.outDir, { recursive: true, force: true });
-    fs.mkdirSync(options.outDir, { recursive: true });
+  /**
+   * 清除历史构建数据
+   */
+  private clearup() {
+    fs.rmSync(this.options.outDir, { recursive: true, force: true });
+    fs.mkdirSync(this.options.outDir, { recursive: true });
   }
 
   /**
@@ -142,56 +148,6 @@ class Cli {
   }
 
   /**
-   * 书签树过滤排除不打包的 isBuild: false
-   * @param bms 书签树
-   * @param parents 父路径
-   * @returns 
-   */
-  private bmsFilter(bms: BookmarkExt[], parents: string[]): BookmarkExt[] {
-    const res = [];
-    for (const bm of bms) {
-      const isFolder = isBookmarkFolder(bm);
-      const fileEmoji = isFolder ? '📂' : '📄';
-
-      const bml = <BookmarkLinkExt>bm;
-      const bmf = <BookmarkFolderExt>bm;
-
-      if (typeof (bm.isBuild) === 'boolean' && bm.isBuild == false) {
-        console.log(
-          chalk.redBright(fileEmoji + ' Ignore:'),
-          chalk.gray('/' + parents.slice(1).join('/')),
-          chalk.blue('=>'),
-          chalk.gray(isFolder ? bm.name : bml.href)
-        );
-
-        continue;
-      }
-      if (isFolder) {
-        res.push(bmf);
-        bmf.children = this.bmsFilter((bmf).children, [...parents, bm.name]);
-        continue;
-      }
-      if (!isBookmarkLink(bm)) {
-        continue;
-      }
-
-      res.push(bml);
-
-      if (bml.icon && fs.existsSync(bml.icon)) {
-        bml.icon = fileToBase64(bml.icon);
-      }
-
-      // 文件夹名称
-      let name = bml.name;
-      bml.description && (name += `[${bml.description}]`);
-      bml.version && (name += `(${bml.version})`);
-
-      console.log(chalk.greenBright(fileEmoji + ' Find:'), chalk.gray(bm.name), chalk.blue('=>'), chalk.gray(bml.href));
-    }
-    return res;
-  }
-
-  /**
    * 将代码添加banner并写入文件
    * @param file 文件路径
    * @param code 代码
@@ -202,6 +158,11 @@ class Cli {
     fs.writeFileSync(file, `${banner}\n${code}`, 'utf-8');
   }
 
+  /**
+   * 通过标签配置格式化名称
+   * @param bml 标签
+   * @returns 名称
+   */
   private bmlNameFormat(bml: BookmarkLinkExt): string {
     let name = bml.name;
     if (bml.description && bml.description != '') {
@@ -214,97 +175,217 @@ class Cli {
   }
 
   /**
-   * 打包 控制台 版本并写入文件
-   * @param bml 书签信息
-   * @param folder 父路径
+   * 是否使用了CDN
    * @returns 
    */
-  private async buildConsoleScriptAndWrite(bml: BookmarkLinkExt, folder: string, banner: string): Promise<BuildBMLinkRes> {
-    try {
-      const res = await this.builder.buildConsoleScript(bml);
-      if ('error' in res) {
-        return { ...res, bml, kind: BuildBMLinkResKind.Console };
+  private isUseCdn(): boolean {
+    const { cdn } = this.options;
+    return typeof (cdn) === 'string' && cdn.trim() != '';
+  }
+
+  /**
+   * 通过书签树创建打包任务
+   */
+  private async createJobs() {
+    const loopBMS = async (bms: BookmarkExt[], parents: string[]) => {
+      for (const bm of bms) {
+        const bml = <BookmarkLinkExt>bm;
+        const bmf = <BookmarkFolderExt>bm;
+        const isFolder = isBookmarkFolder(bm);
+        const fileEmoji = isFolder ? '📂' : '📄';
+
+        if (typeof (bm.isBuild) === 'boolean' && bm.isBuild == false) {
+          // 放弃打包
+          console.log(
+            chalk.yellowBright(fileEmoji + ' Ignore:'),
+            chalk.gray(bm.name),
+            chalk.blue('=>'),
+            chalk.gray(bml.href)
+          );
+          continue;
+        }
+
+        if (isFolder) {
+          await loopBMS(bmf.children, [...parents, bmf.name]);
+          continue;
+        }
+        // 初始打包任务
+        const job: Job = {
+          bml,
+          banner: this.bmlToBanner(bml),
+          parents: [...parents, this.bmlNameFormat(bml)],
+          res: {
+            status: JobResStatus.Create,
+            code: {
+              console: '',
+              bookmark: '',
+              bookmarkNetwork: ''
+            }
+          }
+        };
+
+        console.log(
+          chalk.greenBright(fileEmoji + ' Find:'),
+          chalk.gray(bm.name),
+          chalk.blue('=>'),
+          chalk.gray(bml.href)
+        );
+        this.jobs.push(job);
       }
-      const file = path.resolve(folder, 'console.js');
-      this.saveBannerAndCodeToFile(file, res.code, banner);
-      return { ...res, bml, kind: BuildBMLinkResKind.Console };
+    };
+
+    await loopBMS(this.options.bms, []);
+  }
+
+  /**
+   * 通过打包任务构建各个版本书签
+   * @param job 打包任务
+   */
+  private async buildJob(job: Job) {
+    try {
+      // 控制台版本
+      const consolePath = path.join(...job.parents, 'console.js');
+      const consoleRes = await this.builder.buildConsoleScript(job.bml);
+      job.res.code.console = consoleRes.code;
+
+      this.saveBannerAndCodeToFile(
+        path.resolve(this.options.outDir, consolePath),
+        consoleRes.code,
+        job.banner
+      );
+
+      // 离线书签
+      const bookmarkPath = path.join(...job.parents, 'bookmark.txt');
+      const bookmarkRes = await this.builder.buildBookmarkScript(job.bml);
+      job.res.code.bookmark = bookmarkRes.code;
+
+      this.saveBannerAndCodeToFile(
+        path.resolve(this.options.outDir, bookmarkPath),
+        bookmarkRes.code,
+        job.banner
+      );
+
+      if (this.isUseCdn()) {
+        // 网络版书签
+        const onlinePath = path.join(...job.parents, 'bookmark-network.txt');
+
+        const cdn = this.options.cdn!;
+
+        const bookmarkNetworkRes = await this.builder.buildBookmarkNetworkScript({
+          src: new URL(consolePath, cdn.endsWith('/') ? cdn : cdn + '/').href,
+          name: this.bmlNameFormat(job.bml)
+        });
+        job.res.code.bookmarkNetwork = bookmarkNetworkRes.code;
+
+        this.saveBannerAndCodeToFile(
+          path.resolve(this.options.outDir, onlinePath),
+          bookmarkNetworkRes.code,
+          job.banner
+        );
+      }
+      job.res.status = JobResStatus.BuildSuccess;
+    } catch (error) {
+      job.res.status = JobResStatus.BuildFail;
+      job.res.error = <Error>error;
     } finally {
-      this.buildBar.tick(1);
+      this.bar.tick(1);
     }
   }
 
   /**
-   * 打包 书签脚本 版本并写入文件
-   * @param bml 书签信息
-   * @param folder 父路径
-   * @returns 
+   * 执行打包任务
    */
-  private async buildBookmarkScriptAndWrite(bml: BookmarkLinkExt, folder: string, banner: string): Promise<BuildBMLinkRes> {
-    try {
-      const res = await this.builder.buildBookmarkScript(bml);
-      if ('error' in res) {
-        return { ...res, bml, kind: BuildBMLinkResKind.Bookmark };
-      }
-      const file = path.resolve(folder, 'bookmark.txt');
-      // HTML标签转换
-      bml.href = res.code.replaceAll('&', () => '&amp;');
-      this.saveBannerAndCodeToFile(file, res.code, banner);
-      return { ...res, bml, kind: BuildBMLinkResKind.Bookmark };
-    } finally {
-      this.buildBar.tick(1);
+  private async buildJobs() {
+    if (this.jobs.length == 0) {
+      return;
     }
+    this.bar.total = this.jobs.length;
+    this.bar.tick(0);
+    await Promise.all(this.jobs.map(job => this.limit((j) => this.buildJob(j), job)));
   }
 
   /**
-   * 遍历书签树打包
-   * @param bms 书签树
-   * @param parents 输出路径
+   * 通过打包任务构建书签树
+   * @param isNetwork 是否使用网络标签
+   * @returns 
    */
-  private async loopBuild(bms: BookmarkExt[], parents: string[]): Promise<void> {
-    for (const bm of bms) {
-      if (isBookmarkFolder(bm)) {
-        await this.loopBuild((<BookmarkFolderExt>bm).children, [...parents, bm.name]);
-        continue;
+  private async buildBMSTree(isNetwork: boolean) {
+    /**
+     * 依据路径重建书签树
+     * @param root 书签树
+     * @param parents 书签路径
+     * @param bml 书签
+     */
+    function createTree(root: Bookmark[], parents: string[], bml: BookmarkLinkExt) {
+      for (const parent of parents) {
+        const item = root.find(c => c.name == parent);
+        if (!item) {
+          const folder: BookmarkFolderExt = {
+            name: parent,
+            children: []
+          };
+          root.push(folder);
+          root = folder.children;
+        }
       }
-      if (!isBookmarkLink(bm)) {
-        continue;
-      }
-      const bml = <BookmarkLinkExt>bm;
-
-      if (bml.icon && fs.existsSync(bml.icon)) {
-        bml.icon = fileToBase64(bml.icon);
-      }
-
-      const banner = this.bmlToBanner(bml);
-      const name = this.bmlNameFormat(bml);
-      const folder = path.resolve(...parents, name);
-
-      bml.name = name;
-
-      this.buildJobs.push(this.limit((bm, f, ba) => this.buildConsoleScriptAndWrite(bm, f, ba), bml, folder, banner));
-      this.buildJobs.push(this.limit((bm, f, ba) => this.buildBookmarkScriptAndWrite(bm, f, ba), bml, folder, banner));
+      root.push(bml);
     }
+
+    // 书签树
+    const bms: Bookmark[] = [];
+
+    this.jobs
+      .filter(j => j.res.status == JobResStatus.BuildSuccess)
+      .forEach(({ parents, bml, res: { code } }) => {
+        const b: Bookmark = {
+          name: bml.name,
+          // 判断使用哪种版本
+          href: isNetwork ? code.bookmarkNetwork : code.bookmark
+        };
+        if (bml.icon && fs.existsSync(bml.icon)) {
+          b.icon = fileToBase64(bml.icon);
+        }
+        createTree(bms, parents, b);
+      });
+
+    return bms;
   }
 
   /**
    * 依据书签树构建书签HTML
-   * @param bme 书签树
-   * @returns 书签HTML
    */
-  private buildHTML(bme: BookmarkExt[]): string {
-    let callback: RenderHTMLCallbackFuntion | undefined = undefined;
+  private async buildHTML() {
+    // 书签HTML构建回调
+    const callback: RenderHTMLCallbackFuntion = ({ bookmark }) => {
+      const { bmBuildOptions } = this.options;
+      if (!bmBuildOptions || !bmBuildOptions.htmlTemple) {
+        return;
+      }
+      // 通过配置中模板替换
+      bmBuildOptions.htmlTemple.replaceAll('[[bookmark]]', () => bookmark + '\n');
+    };
 
-    const { bmBuildOptions } = this.options;
-    if (bmBuildOptions && bmBuildOptions.htmlTemple) {
-      bmBuildOptions.htmlTemple.at(1);
-      callback = ({ bookmark }) => bmBuildOptions.htmlTemple!.replaceAll('[[bookmark]]', () => bookmark + '\n');
-    }
-
+    // 离线版
     const bookmarkBulder = new BookmarkBuilder(this.options.bmBuildOptions);
-    const html = bookmarkBulder.buildHTMLString(bme, callback);
     const file = path.resolve(this.options.outDir, 'favorites.html');
-    fs.writeFileSync(file, html, { encoding: 'utf-8' });
-    return file;
+    fs.writeFileSync(
+      file,
+      bookmarkBulder.buildHTMLString(await this.buildBMSTree(false), callback),
+      { encoding: 'utf-8' }
+    );
+
+    console.log(chalk.greenBright(file));
+
+    if (this.isUseCdn()) {
+      // 网络版
+      const networkFile = path.resolve(this.options.outDir, 'favorites-network.html');
+      fs.writeFileSync(
+        networkFile,
+        bookmarkBulder.buildHTMLString(await this.buildBMSTree(true), callback),
+        { encoding: 'utf-8' }
+      );
+      console.log(chalk.greenBright(networkFile));
+    }
   }
 
   /**
@@ -315,29 +396,28 @@ class Cli {
       name: string
       stat: string
       error?: string
-      type: string
     }
-    const infos: Info[] = this.buildJobsRes.map(j => {
-      const res: Info = {
-        name: j.bml.name,
-        type: j.kind.toString(),
+    // 异常
+    let e: Error | undefined;
+
+    // 统计信息
+    const infos: Info[] = this.jobs.map(({ bml: { name }, res }) => {
+      const r: Info = {
+        name,
         stat: 'Success',
       };
-      if ('error' in j) {
-        res['error'] = j.error.message;
-        res['stat'] = 'Fail';
+      if (res.status == JobResStatus.BuildFail && res.error) {
+        r['error'] = res.error.message;
+        r['stat'] = 'Fail';
+        e = res.error;
       }
-      return res;
+      return r;
     });
-    console.table(infos, ['name', 'stat', 'type', 'error']);
+    console.table(infos, ['name', 'stat', 'error']);
 
-    const isFail = this.buildJobsRes.find(j => {
-      if ('error' in j) {
-        console.error(j.error);
-        return true;
-      }
-    });
-    if (isFail) {
+    if (e) {
+      // 打印第一个异常信息
+      console.error(e);
       console.log(chalk.redBright('\nBuild fail!!! 😢😢😢😢'));
     } else {
       console.log(chalk.greenBright('\nBuild success!!! 🎉🎉🎉🎉'));
@@ -348,29 +428,25 @@ class Cli {
    * 开始构建
    */
   async run() {
-    this.clearup(this.options);
+    // 清理
+    this.clearup();
 
+    // 创建任务
     console.log(chalk.yellow('[[Build script start]]'));
-    const bms = this.bmsFilter(this.options.bms, [this.options.outDir]);
-    await this.loopBuild(bms, [this.options.outDir]);
-    console.log('');
+    await this.createJobs();
 
-    if (this.buildJobs.length > 0) {
-      this.buildBar.total = this.buildJobs.length;
-      this.buildBar.tick(0);
-    }
+    // 执行任务
+    console.log(chalk.yellow('\n[[Building]]'));
+    await this.buildJobs();
 
-    this.buildJobsRes = await Promise.all(this.buildJobs);
-    console.log(chalk.yellow('\n[[Build HTML sctart]]'));
+    // 构建书签
+    console.log(chalk.yellow('\n[[Build HTML start]]'));
+    await this.buildHTML();
 
-    const htmlFile = this.buildHTML(bms);
-    console.log(chalk.green(htmlFile));
-
+    // 打印结果
     console.log(chalk.yellow('\n[[Stat]]'));
     this.printBuildStatInfo();
-
   }
-
 }
 
 (async () => {
@@ -379,12 +455,14 @@ class Cli {
   const configFile = config ?? findConfigFileNameInCwd(mode);
 
   if (!fs.existsSync(configFile)) {
+    // 配置文件不存在
     throw new Error('BM config not found!');
   }
 
   // 加载并解析配置文件
   const options = await formatConfig(await loadOptionsFile(path.resolve(configFile)));
 
+  // 加载环境变量
   const env = loadEnvFile(options.env, mode);
   env.MODE = mode;
 

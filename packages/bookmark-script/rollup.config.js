@@ -2,6 +2,7 @@ import { defineConfig } from 'rollup';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
 import json from '@rollup/plugin-json';
+import copy from 'rollup-plugin-copy';
 import { builtinModules } from 'node:module';
 import fs from 'node:fs';
 
@@ -13,7 +14,7 @@ const entries = {
   options: 'src/client/options.ts',
   env: 'src/env.ts',
   args: 'src/args.ts',
-  builder: 'src/builder.ts',
+  builder: 'src/builder/index.ts',
   scan: 'src/scan.ts'
 };
 
@@ -26,13 +27,6 @@ const banner = `/**
  * Copyright (c) 2020-present ${packageJson.author}
  * @license ${packageJson.license}
  */`;
-
-function initPlugins(minify = false) {
-  return [
-    json(),
-    esbuild({ minify })
-  ];
-}
 
 const external = [
   '@xiaohuohumax/bookmark',
@@ -72,7 +66,14 @@ export default defineConfig([
       format: 'esm',
       entryFileNames: '[name].mjs',
     },
-    plugins: initPlugins(),
+    plugins: [json(), esbuild(), copy({
+      targets: [
+        {
+          src: 'src/builder/inject/script.ts',
+          dest: 'dist/inject'
+        }
+      ]
+    })],
     external
   },
   {
@@ -83,7 +84,7 @@ export default defineConfig([
       format: 'cjs',
       entryFileNames: '[name].cjs',
     },
-    plugins: initPlugins(),
+    plugins: [json(), esbuild()],
     external
   },
   {

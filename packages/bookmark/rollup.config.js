@@ -4,7 +4,7 @@ import esbuild from 'rollup-plugin-esbuild';
 import json from '@rollup/plugin-json';
 import { builtinModules } from 'node:module';
 import fs from 'node:fs';
-import raw from './build/plugins/raw.js';
+import raw from '@xiaohuohumax/rollup-plugin-raw';
 
 const packageJson = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
 

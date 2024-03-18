@@ -2,8 +2,11 @@ import terser, { Options as terserOptions } from '@rollup/plugin-terser';
 import { BookmarkLink as BML, BookmarkFolder as BF, BuildOptions } from '@xiaohuohumax/bookmark';
 import { Plugin } from 'rollup';
 
-import { buildScript, BuildScriptRes, DefinePluginOptions } from './rollup';
-import meta from './rollup/plugins/virtual';
+import { buildScript, BuildScriptRes, DefinePluginOptions } from '../rollup';
+import virtual from '../rollup/plugins/virtual';
+import path from 'path';
+import { InjectScript } from './inject';
+import { fileURLToPath } from 'url';
 
 export { isBookmarkFolder, isBookmarkLink } from '@xiaohuohumax/bookmark';
 
@@ -23,6 +26,13 @@ export interface BookmarkLinkExt extends BML {
    * 书签描述
    */
   description?: string
+  /**
+   * 打包模式
+   * 
+   * online: 全部依赖一起打包
+   * offline: 非必要依赖不打包
+   */
+  mode?: 'online' | 'offline'
 }
 
 /**
@@ -39,6 +49,9 @@ export interface BookmarkFolderExt<C = BookmarkExt> extends BF<C> {
   description?: string
 }
 
+/**
+ * 书签
+ */
 export type BookmarkExt = BookmarkFolderExt | BookmarkLinkExt
 
 
@@ -52,6 +65,7 @@ export type BMBuildOptions = BuildOptions & {
 }
 
 export const BOOKMARK_META: string = 'bookmark:meta';
+const INJECT_SCRIPT: string = 'inject:script';
 
 /**
  * 书签脚本打包配置
@@ -101,23 +115,6 @@ export class BookmarkScriptBuilder {
   }
 
   /**
-   * 依据书签信息替换banner的信息
-   * @param bml 书签信息
-   * @returns 书签banner
-   */
-  private bmlToBanner(bml: BookmarkLinkExt) {
-    if (!this.options.banner) {
-      return this.options.banner;
-    }
-    let banner: string = this.options.banner;
-    for (const [key, value] of Object.entries(bml)) {
-      banner = banner.replace(`[${key}]`, () => value);
-    }
-
-    return banner;
-  }
-
-  /**
    * 添加环境变量
    * @param key 环境变量名称
    * @param value 环境变量值
@@ -130,7 +127,6 @@ export class BookmarkScriptBuilder {
     replace.values['import.meta.env.' + key] = JSON.stringify(value);
   }
 
-
   /**
    * 打包 控制台 版本代码
    * @param bml 书签信息
@@ -140,11 +136,28 @@ export class BookmarkScriptBuilder {
     return await buildScript({
       input: bml.href,
       plugins: [
-        meta(BOOKMARK_META, bml),
+        virtual(BOOKMARK_META, bml),
         ...this.options.plugins
       ],
       definePluginOptions: this.options.definePluginOptions,
     });
+  }
+
+  /**
+   * 打包 网络书签 版本代码
+   * @param inject 网络链接信息
+   * @returns 打包结果
+   */
+  public async buildBookmarkNetworkScript(inject: InjectScript): Promise<BuildScriptRes> {
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const res = await buildScript({
+      input: path.resolve(__dirname, './inject/script.ts'),
+      plugins: [
+        virtual(INJECT_SCRIPT, inject),
+        terser(),
+      ],
+    });
+    return { ...res, code: `javascript:${encodeURIComponent(res.code)}void(0);` };
   }
 
   /**
@@ -156,7 +169,7 @@ export class BookmarkScriptBuilder {
     const res = await buildScript({
       input: bml.href,
       plugins: [
-        meta(BOOKMARK_META, bml),
+        virtual(BOOKMARK_META, bml),
         terser(<terserOptions>{
           format: {
             comments: false
@@ -166,10 +179,6 @@ export class BookmarkScriptBuilder {
       ],
       definePluginOptions: this.options.definePluginOptions,
     });
-    if ('error' in res) {
-      return { error: res.error };
-    }
-    const code = `javascript:${encodeURI(res.code)}void(0);`;
-    return { code };
+    return { ...res, code: `javascript:${encodeURIComponent(res.code)}void(0);` };
   }
 }

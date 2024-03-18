@@ -22,6 +22,17 @@ export interface BookmarkScriptOptions extends BookmarkScriptBuilderOptions {
    * 脚本目录
    */
   bms: BookmarkExt[]
+  /**
+   * 脚本托管地址, 当此配置存在时额外构建网络版本
+   * 
+   * 网络版本:
+   * 
+   * + 优点: 书签代码大幅减少, 脚本代码保存到脚本托管地址
+   * + 缺点: 每次都要请求脚本, 可能出现 CSP, Network 问题
+   * 
+   * 例如: https://cdn.jsdelivr.net/...
+   */
+  cdn?: string
 }
 
 /**
@@ -96,6 +107,7 @@ export async function mergeConfig(
       case 'buildLimit':
       case 'definePluginOptions':
       case 'bmBuildOptions':
+      case 'cdn':
         merged[key] = value;
         continue;
       case 'bms':

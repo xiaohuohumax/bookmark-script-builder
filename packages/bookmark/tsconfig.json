@@ -9,7 +9,10 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "@xiaohuohumax/rollup-plugin-raw/client"
+    ]
   },
   "include": [
     "src/**/*",

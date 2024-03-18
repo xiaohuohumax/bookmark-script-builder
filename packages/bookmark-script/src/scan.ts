@@ -187,9 +187,12 @@ function loopScan(root: string, options: Required<ScanScriptOptions>): BookmarkE
       const bm = scriptFileToBLE(file, options.optionPrefix);
       if (bm) {
         res.push(bm);
-        console.log(chalk.greenBright('📄 Find:'), chalk.grey(bm.name), chalk.blue('=>'), chalk.grey(file));
-      } else {
-        console.log(chalk.yellowBright('📄 Ignore:'), chalk.grey(file));
+        console.log(
+          chalk.greenBright('📄 Find:'),
+          chalk.grey(bm.name),
+          chalk.blue('=>'),
+          chalk.grey(file)
+        );
       }
     }
   }
@@ -197,7 +200,12 @@ function loopScan(root: string, options: Required<ScanScriptOptions>): BookmarkE
   if (fs.existsSync(folderFile)) {
     const bfe = folderFileToBFE(folderFile, options.optionPrefix);
     bfe.children = res;
-    console.log(chalk.greenBright('📂 Find:'), chalk.grey(bfe.name), chalk.blue('=>'), chalk.grey(folderFile));
+    console.log(
+      chalk.greenBright('📂 Find:'),
+      chalk.grey(bfe.name),
+      chalk.blue('=>'),
+      chalk.grey(folderFile)
+    );
     return [bfe];
   }
   return res;

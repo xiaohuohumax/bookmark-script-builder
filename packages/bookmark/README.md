@@ -43,8 +43,8 @@ fs.writeFileSync('favorites.html', htmlString);
 <style>
   /* ... */
 </style>
-<TITLE>Bookmark Script</TITLE>
-<H1>Bookmark Script</H1>
+<TITLE>Bookmarklet</TITLE>
+<H1>Bookmarklet</H1>
 <DL><p>
     <DT><H3 PERSONAL_TOOLBAR_FOLDER="true"></H3>
     <DL><p>

@@ -22,7 +22,7 @@ export interface RenderHTMLCallbackOptions {
   bookmark: string
 }
 
-export type RenderHTMLCallbackFuntion = (options: RenderHTMLCallbackOptions) => string;
+export type RenderHTMLCallbackFuntion = (options: RenderHTMLCallbackOptions) => string | void;
 
 /**
  * 书签打包器
@@ -83,9 +83,11 @@ export class Builder {
     const bookmark = bookmarkLines.join('\n');
 
     if (renderHTMLCallback && typeof (renderHTMLCallback) === 'function') {
-      return renderHTMLCallback({ bookmark });
+      const res = renderHTMLCallback({ bookmark });
+      if (res) {
+        return res;
+      }
     }
     return defineTempleHTML.replaceAll('[[bookmark]]', () => bookmark);
   }
-
 }

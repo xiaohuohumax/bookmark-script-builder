@@ -156,9 +156,6 @@ alert('....')
 import meta from 'bookmark:meta';
 
 console.log(meta.name, meta.icon);
-// **注意**
-// href 会变为完整路径
-// icon 则会变为 base64 字符
 ```
 
 3. 利用 `rollup` 插件扩展其他类型文件
@@ -191,7 +188,7 @@ export default defineConfig(() => {
 });
 ```
 
-1. 全局环境变量
+5. 全局环境变量
 
 
 ```text
@@ -221,7 +218,7 @@ alert(import.meta.env.APP_NAME)
 // show time
 ```
 
-5. 构建模式
+6. 构建模式
 
 ```shell
 # 例如 设置为 dev 模式
@@ -231,7 +228,7 @@ npx bookmark-script -m dev
 
 环境变量也是如此 `.env.[mode].local` `.env.[mode]`
 
-1. 多配置文件合并
+7. 多配置文件合并
 
 ```ts
 // bookmark-script -m dev
