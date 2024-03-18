@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 3.0.1
+
+### Patch Changes
+
+- [`d196368`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/d1963689230778c88894200de42514a2ce7472a9) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - 书签树构建层级异常 BUG 修复
+
 ## 3.0.0
 
 ### Major Changes
