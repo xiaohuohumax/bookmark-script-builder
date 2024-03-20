@@ -1,6 +1,6 @@
 {
   "name": "@xiaohuohumax/example-bookmark",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "build": "rimraf dist && pnpm build:base && pnpm build:custom",

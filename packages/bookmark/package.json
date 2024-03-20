@@ -1,7 +1,7 @@
 {
   "name": "@xiaohuohumax/bookmark",
   "type": "module",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "浏览器书签构建工具",
   "scripts": {
     "build": "rollup -c",
