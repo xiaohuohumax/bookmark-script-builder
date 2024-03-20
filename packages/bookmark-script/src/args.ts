@@ -1,24 +1,27 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+
 import { version } from '../package.json';
 
 const cli = yargs(hideBin(process.argv));
 
-cli.alias('v', 'version');
-cli.alias('h', 'help');
-
-cli.version(version);
-
-cli.option('config', {
-  type: 'string',
-  description: '配置文件',
-  alias: 'c'
-}).option('mode', {
-  type: 'string',
-  description: '打包模式',
-  default: '',
-  alias: 'm'
-});
+cli
+  .usage(`书签脚本命令行工具 Bookmarklet Cli v${version}`)
+  .describe('help', '显示帮助信息')
+  .alias('v', 'version')
+  .alias('h', 'help')
+  .version(version)
+  .option('config', {
+    type: 'string',
+    description: '配置文件',
+    alias: 'c'
+  })
+  .option('mode', {
+    type: 'string',
+    description: '打包模式',
+    default: 'production',
+    alias: 'm'
+  });
 
 /**
  * 命令行参数

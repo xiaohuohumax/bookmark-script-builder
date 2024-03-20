@@ -1,0 +1,15 @@
+{
+  "name": "@xiaohuohumax/example-custom",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite-node build.ts"
+  },
+  "keywords": [],
+  "author": "xiaohuohumax",
+  "license": "MIT",
+  "devDependencies": {
+    "@xiaohuohumax/bookmark-script": "workspace:^",
+    "vite-node": "^1.3.1"
+  }
+}

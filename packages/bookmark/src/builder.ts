@@ -22,6 +22,9 @@ export interface RenderHTMLCallbackOptions {
   bookmark: string
 }
 
+/**
+ * 渲染内容回调
+ */
 export type RenderHTMLCallbackFuntion = (options: RenderHTMLCallbackOptions) => string | void;
 
 /**
@@ -31,9 +34,7 @@ export class Builder {
   private options: Required<BuildOptions> = DEFINE_BUILD_OPTIONS;
 
   constructor(options?: BuildOptions) {
-    if (options) {
-      this.options = Object.assign(this.options, options);
-    }
+    this.options = Object.assign(this.options, options);
   }
 
   /**
@@ -53,9 +54,9 @@ export class Builder {
           '</DL><p>',
         );
       } else if (isBookmarkLink(bm)) {
-        const bml = <BookmarkLink>bm;
+        const { icon = '', href, name } = <BookmarkLink>bm;
         lines.push(
-          `<DT><A HREF="${bml.href}" ICON="${bml.icon}">${bml.name}</A>`,
+          `<DT><A HREF="${href}" ICON="${icon}">${name}</A>`,
         );
       }
     }

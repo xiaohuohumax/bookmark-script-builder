@@ -1,0 +1,24 @@
+{
+  "name": "@xiaohuohumax/example-react",
+  "version": "1.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bookmark-script"
+  },
+  "keywords": [],
+  "author": "xiaohuohumax",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@xiaohuohumax/bookmark-script": "workspace:^",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

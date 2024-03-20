@@ -1,24 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": [
-      "DOM",
-      "ESNext"
-    ],
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
     "types": [
       "@xiaohuohumax/rollup-plugin-raw/client"
     ]
   },
   "include": [
-    "src/**/*",
-    "*.d.ts"
-  ],
-  "exclude": [
-    "dist/**/*"
+    "src"
   ]
 }

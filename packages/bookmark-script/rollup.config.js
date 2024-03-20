@@ -1,60 +1,39 @@
 import { defineConfig } from 'rollup';
+
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
 import json from '@rollup/plugin-json';
 import copy from 'rollup-plugin-copy';
+
 import { builtinModules } from 'node:module';
 import fs from 'node:fs';
 
-const packageJson = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
+const pkg = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
 
 const entries = {
   index: 'src/index.ts',
-  cli: 'src/client/index.ts',
-  options: 'src/client/options.ts',
-  env: 'src/env.ts',
-  args: 'src/args.ts',
-  builder: 'src/builder/index.ts',
-  scan: 'src/scan.ts'
+  cli: 'src/cli/index.ts',
+  options: 'src/cli/options.ts',
+  builder: 'src/builder/index.ts'
 };
 
-const minEnties = Object.assign({}, entries);
+const dEnties = Object.assign({}, entries);
 
-delete minEnties['cli'];
+delete dEnties['cli'];
 
 const banner = `/**
- * ${packageJson.name} ${packageJson.version}
- * Copyright (c) 2020-present ${packageJson.author}
- * @license ${packageJson.license}
+ * ${pkg.name} ${pkg.version}
+ * Copyright (c) 2020-present ${pkg.author}
+ * @license ${pkg.license}
  */`;
 
 const external = [
-  '@xiaohuohumax/bookmark',
+  ...Object.keys(pkg.dependencies ?? {}),
   ...builtinModules,
   'node:url',
-  'node:fs',
   'node:path',
-
-  'rollup',
-  '@rollup/plugin-json',
-  '@rollup/plugin-commonjs',
-  '@rollup/plugin-node-resolve',
-  '@rollup/plugin-alias',
-  '@rollup/plugin-replace',
-  '@rollup/plugin-terser',
-  '@rollup/plugin-babel',
-
-  'yargs',
-  'yargs/helpers',
-  'dotenv',
-  'dotenv-parse-variables',
-  'p-limit',
-  'mime-types',
-  'chalk',
-  'progress',
-
-  '@babel/core',
-  '@babel/preset-typescript'
+  'node:fs',
+  'yargs/helpers'
 ];
 
 export default defineConfig([
@@ -88,7 +67,7 @@ export default defineConfig([
     external
   },
   {
-    input: minEnties,
+    input: dEnties,
     output: {
       dir: 'dist',
       banner,

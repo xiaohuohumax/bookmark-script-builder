@@ -6,16 +6,16 @@ import { builtinModules } from 'node:module';
 import fs from 'node:fs';
 import raw from '@xiaohuohumax/rollup-plugin-raw';
 
-const packageJson = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
+const pkg = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
 
 const entries = {
   index: './src/index.ts'
 };
 
 const banner = `/**
- * ${packageJson.name} ${packageJson.version}
- * Copyright (c) 2020-present ${packageJson.author}
- * @license ${packageJson.license}
+ * ${pkg.name} ${pkg.version}
+ * Copyright (c) 2020-present ${pkg.author}
+ * @license ${pkg.license}
  */`;
 
 function initPlugins(minify = false) {

@@ -11,7 +11,7 @@
     "examples:build": "pnpm -r --filter=./examples/** --stream run build",
     "build": "pnpm -r --filter=./packages/** --stream run build",
     "clear": "rimraf -g **/node_modules **/dist",
-    "lint:fix": "eslint --fix --ext .ts,.js .",
+    "lint:fix": "eslint --fix --ext .ts,.js,.mjs,.mts,.jsx,.tsx .",
     "changeset": "changeset",
     "release": "pnpm build && changeset publish"
   },
@@ -29,6 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "eslint": "^8.57.0",
+    "rimraf": "^5.0.5",
     "typescript": "5.3.x"
   }
 }

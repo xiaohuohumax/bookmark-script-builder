@@ -1,16 +1,7 @@
 # 浏览器书签
 
+一些关于浏览器书签的一些库
 
-## ℹ 书签脚本
-
-
-```txt
-<!-- js -->
-alert("Hello, World!");
-
-<!-- 书签代码 -->
-javascript:(function(){alert("Hello, World!");})();void(0);
-```
 
 ## 🔖 书签构建
 
@@ -18,17 +9,18 @@ javascript:(function(){alert("Hello, World!");})();void(0);
 
 **详见:** [书签构建](./packages/bookmark/README.md)
 
-## 📦 书签脚本打包工具 cli
+## 📦 书签脚本打包工具 Bookmarklet Cli
 
 将代码打包成书签脚本
 
 **详见:** [书签脚本构建工具](./packages/bookmark-script/README.md)
 
-## 📄 Todo
+#### 📄 Todo
 
 + [x] 打包模式修改
   + [x] **离线:** (打包完无需请求任何资源)书签URL长可离线
   + [x] **在线:** (打包完需要请求额外资源)书签URL短需在线
++ [x] 打包工具由 Rollup 替换为 Vite
 
 ## 最后
 

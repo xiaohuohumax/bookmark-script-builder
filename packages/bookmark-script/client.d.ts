@@ -1,18 +1,9 @@
-interface ImportMetaEnv {
-  MODE: string
-}
+/// <reference types="vite/client" />
 
-interface ImportMeta {
-  url: string
-  readonly env: ImportMetaEnv
-}
-
+/**
+ * 书签信息虚拟模块
+ */
 declare module 'bookmark:meta' {
   const meta: import('./dist/builder').BookmarkLinkExt;
   export default meta;
-}
-
-declare module '@babel/preset-typescript' {
-  const plugin: import('@babel/core').PluginItem;
-  export default plugin;
 }

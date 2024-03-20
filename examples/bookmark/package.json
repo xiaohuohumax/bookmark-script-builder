@@ -2,9 +2,10 @@
   "name": "@xiaohuohumax/example-bookmark",
   "version": "1.0.0",
   "private": true,
-  "description": "",
   "scripts": {
-    "build": "vite-node src/index.ts"
+    "build": "rimraf dist && pnpm build:base && pnpm build:custom",
+    "build:base": "vite-node src/index.ts",
+    "build:custom": "vite-node src/custom.ts"
   },
   "keywords": [],
   "author": "xiaohuohumax",

@@ -1,0 +1,15 @@
+{
+  "name": "@xiaohuohumax/example-alias",
+  "version": "1.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bookmark-script"
+  },
+  "keywords": [],
+  "author": "xiaohuohumax",
+  "license": "MIT",
+  "devDependencies": {
+    "@xiaohuohumax/bookmark-script": "workspace:^"
+  }
+}

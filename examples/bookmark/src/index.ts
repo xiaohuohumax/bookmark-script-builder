@@ -24,7 +24,6 @@ const htmlString = buildBar.buildHTMLString([
 const outDir = 'dist';
 const outFile = path.resolve(outDir, 'favorites.html');
 
-fs.existsSync(outDir) && fs.rmSync(outDir, { recursive: true });
 fs.mkdirSync(outDir);
 
 fs.writeFileSync(outFile, htmlString);

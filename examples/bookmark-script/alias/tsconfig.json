@@ -1,0 +1,16 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [
+      "@xiaohuohumax/bookmark-script/client"
+    ],
+    "paths": {
+      "#/*": [
+        "./util/*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
