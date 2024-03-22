@@ -1,6 +1,6 @@
 {
   "name": "@xiaohuohumax/create-bookmark-script",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "书签脚本打包工具 Bookmarklet Cli 模板",
   "type": "module",
   "scripts": {
