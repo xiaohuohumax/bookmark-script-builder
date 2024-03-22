@@ -55,6 +55,7 @@ export async function build(options: BuildScriptOptions): Promise<OutputChunk> {
     mode,
     envDir,
     envPrefix,
+    configFile: false,
     plugins,
     resolve: {
       alias

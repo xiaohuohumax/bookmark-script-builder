@@ -28,8 +28,6 @@
     "bookmark-script": "bookmark-script.mjs"
   },
   "dependencies": {
-    "@babel/core": "^7.24.0",
-    "@babel/preset-typescript": "^7.23.3",
     "@xiaohuohumax/bookmark": "workspace:^",
     "chalk": "^5.3.0",
     "mime-types": "^2.1.35",
@@ -42,7 +40,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
-    "@types/babel__core": "^7.20.5",
     "@types/mime-types": "^2.1.4",
     "@types/progress": "^2.0.7",
     "@types/yargs": "^17.0.32",

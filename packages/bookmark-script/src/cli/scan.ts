@@ -1,13 +1,13 @@
 import chalk from 'chalk';
 
 import { BookmarkExt, BookmarkFolderExt, BookmarkLinkExt } from '../builder';
-import { astScriptCommentBlocks } from './babel';
 
 import nodePath from 'node:path';
 import fs from 'node:fs';
 
 const OPTION_RE = /^(\w+)\s+(.*)$/i;
 const ENTER_RE = /\r?\n/i;
+const COMMENT_BLOCK_RE = /\/\*([\s\S]+?)\*\//ig;
 
 /**
  * 依据配置前缀组装配置信息
@@ -69,13 +69,24 @@ function folderFileToBFE(file: string, optionPrefix: string): BookmarkFolderExt 
 }
 
 /**
+ * 通过 re 匹配全部 块注释
+ * @param file 文件
+ * @returns 
+ */
+export function reScriptCommentBlocks(file: string): string[] {
+  const data = fs.readFileSync(file, 'utf-8');
+  return Array.from(data.matchAll(COMMENT_BLOCK_RE)).map(m => m[1]);
+}
+
+/**
  * 通过配置前缀获取脚本配置信息
  * @param file 脚本文件路径
  * @param optionPrefix 配置前缀
  * @returns 脚本配置信息
  */
 function scriptFileToBLE(file: string, optionPrefix: string): BookmarkLinkExt | void {
-  const comment = astScriptCommentBlocks(file)[0];
+  // 只取第一个 块注释
+  const comment = reScriptCommentBlocks(file)[0];
   if (!comment) {
     return;
   }

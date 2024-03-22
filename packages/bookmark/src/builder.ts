@@ -7,6 +7,8 @@ import defineTempleHTML from './index.html?raw';
 export interface BuildOptions {
   /**
    * 是否添加到 个人工具栏文件夹
+   * 
+   * @default true
    */
   personalToolbarFolder?: boolean
 }
