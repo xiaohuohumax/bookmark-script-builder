@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 4.0.1
+
+### Patch Changes
+
+- [`d9cdc00`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/d9cdc0013f529162404f2d05bd9671840e33a9bf) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - 关闭读取 vite.config.js, 修复扫描文件信息失效(jsx)问题
+
 ## 4.0.0
 
 ### Major Changes
