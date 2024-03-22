@@ -15,13 +15,22 @@ javascript:(function(){alert("Hello, World!");})();void(0);
 
 ## 使用
 
-### 添加依赖
+### 1. 模板创建
+
+```shell
+npm create @xiaohuohumax/bookmark-script
+# 选择模板
+```
+
+### 2. 自行创建
+
+#### 添加依赖
 
 ```shell
 npm i @xiaohuohumax/bookmark-script
 ```
 
-### 编写配置文件
+#### 编写配置文件
 
 ```txt
 project
@@ -54,7 +63,7 @@ export default defineConfig({
 });
 ```
 
-### 添加智能提示 (可选)
+#### 添加智能提示 (可选)
 
 tsconfig.json
 
@@ -68,7 +77,7 @@ tsconfig.json
 }
 ```
 
-### 编写书签脚本
+#### 编写书签脚本
 
 ```ts
 // index.ts
@@ -77,7 +86,7 @@ tsconfig.json
 alert(new Date());
 ```
 
-### 打包构建
+#### 打包构建
 
 修改 `package.json`
 

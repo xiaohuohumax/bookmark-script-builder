@@ -1,0 +1,17 @@
+{
+  "name": "template-vue",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "bookmark-script"
+  },
+  "dependencies": {
+    "vue": "^3.4.19"
+  },
+  "devDependencies": {
+    "@xiaohuohumax/bookmark-script": "^4.0.1",
+    "@vitejs/plugin-vue": "^5.0.4"
+  }
+}

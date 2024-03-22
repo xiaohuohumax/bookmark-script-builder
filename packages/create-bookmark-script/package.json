@@ -1,0 +1,41 @@
+{
+  "name": "@xiaohuohumax/create-bookmark-script",
+  "version": "0.0.0",
+  "description": "书签脚本打包工具 Bookmarklet Cli 模板",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c --watch --watch.include src/**"
+  },
+  "keywords": [
+    "bookmarklet",
+    "bookmark-script",
+    "npm create"
+  ],
+  "author": "xiaohuohumax",
+  "license": "MIT",
+  "homepage": "https://github.com/xiaohuohumax/bookmark-script-builder/tree/main/packages/create-bookmark-script#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaohuohumax/bookmark-script-builder.git",
+    "directory": "packages/create-bookmark-script"
+  },
+  "bin": {
+    "create-bookmark-script": "index.mjs"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.4.9",
+    "@types/yargs": "^17.0.32",
+    "rollup": "^4.12.1",
+    "rollup-plugin-esbuild": "^6.1.1"
+  },
+  "files": [
+    "dist",
+    "*.mjs",
+    "template-*"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "template-simple-ts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "bookmark-script"
+  },
+  "devDependencies": {
+    "@xiaohuohumax/bookmark-script": "^4.0.1",
+    "typescript": "^5.2.2"
+  }
+}

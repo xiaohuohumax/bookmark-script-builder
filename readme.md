@@ -15,12 +15,19 @@
 
 **详见:** [书签脚本构建工具](./packages/bookmark-script/README.md)
 
+## 📂 书签脚本打包工具模板
+
+使用 `npm create` 创建模板
+
+**详见:** [创建模板](./packages/create-bookmark-script/README.md)
+
 #### 📄 Todo
 
 + [x] 打包模式修改
   + [x] **离线:** (打包完无需请求任何资源)书签URL长可离线
   + [x] **在线:** (打包完需要请求额外资源)书签URL短需在线
 + [x] 打包工具由 Rollup 替换为 Vite
++ [ ] 模板创建
 
 ## 最后
 
