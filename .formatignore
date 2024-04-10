@@ -1,0 +1,15 @@
+.git*
+
+.editorconfig
+.eslintignore
+.formatignore
+_gitignore
+
+.env*
+
+pnpm-lock.yaml
+LICENSE
+*.md
+*.txt
+*.svg
+*.png

@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   scans: [{ root: 'src' }],
-  plugins:[react()]
+  plugins: [react()]
 });
