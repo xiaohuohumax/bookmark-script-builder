@@ -396,7 +396,7 @@ export class Cli {
         return;
       }
       // 通过配置中模板替换
-      bmBuildOptions.htmlTemple.replaceAll('[[bookmark]]', () => bookmark + '\n');
+      return bmBuildOptions.htmlTemple.replaceAll('[[bookmark]]', () => bookmark + '\n');
     };
 
     // 离线版
