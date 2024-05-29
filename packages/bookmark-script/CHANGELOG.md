@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark-script
 
+## 4.0.2
+
+### Patch Changes
+
+- [`a595736`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/a595736eae0956685e2035ee47d9da452a967872) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - index.html template fixed
+
 ## 4.0.1
 
 ### Patch Changes
