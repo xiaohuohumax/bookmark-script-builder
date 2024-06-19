@@ -1,5 +1,12 @@
 # @xiaohuohumax/bookmark-script
 
+## 4.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`b12ba21`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/b12ba218858a8a793eb757619f3678847dce8e77)]:
+  - @xiaohuohumax/bookmark@2.1.2
+
 ## 4.0.2
 
 ### Patch Changes
