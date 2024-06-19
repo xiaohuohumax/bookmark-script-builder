@@ -1,5 +1,11 @@
 # @xiaohuohumax/bookmark
 
+## 2.1.2
+
+### Patch Changes
+
+- [`b12ba21`](https://github.com/xiaohuohumax/bookmark-script-builder/commit/b12ba218858a8a793eb757619f3678847dce8e77) Thanks [@xiaohuohumax](https://github.com/xiaohuohumax)! - 修改模板 title
+
 ## 2.1.1
 
 ### Patch Changes
